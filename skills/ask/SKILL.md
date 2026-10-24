@@ -45,7 +45,7 @@ A request to rank, compare or score people ("who's slowest?", "who does the most
 - An epic is a Linear parent issue or a project milestone, matched by its title or name (case-insensitive) within the mapped projects; an issue is its `identifier`.
 - Window: "today", "now" or no time words → the default window of `references/gather-linear.md` ("Window"); "this week" → from Monday 00:00 in the map's `timezone` to now; another stated range → that range. In fixture mode, `now` is the fixture's `window.end`.
 - **Not in the map** (a project, team, epic or person that identity.md cannot resolve):
-  - Live: say it is not in the team map, then search for it once: Linear `list_projects` and `list_issues(query=<name>)`, Slack `slack_search_channels(query=<name>)`. Answer only from what the search returns, each item linked, marked "not in the team map". identity.md's by-UUID rule governs mapped projects; this search is for discovery only and never colours anything.
+  - Live: say it is not in the team map, then search for it once per `references/gather-linear.md` ("Discovery search"): projects, epics and issues there plus Slack `slack_search_channels(query=<name>)`; a person via Linear `list_users` there plus Slack `slack_search_users(query=<name>)`. Answer only from what the search returns, each item linked, marked "not in the team map", with no colour.
   - Fixture mode: say it is not in the team map and that no search is possible on fixtures. Give no status, colour or flags for it, and never substitute a mapped project.
   - Either way, end by offering `setup refresh` to add it to the map.
 

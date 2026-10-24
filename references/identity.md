@@ -28,7 +28,7 @@ Resolve in the same order:
 4. Connector identity: `linear_project_id` (UUID), a repo in `repos`, or a channel in `slack_channels`.
 5. Ask, listing candidate project names.
 
-A resolved project is always queried by its `linear_project_id` UUID, never by name. A project that is not in the map is answered as "not in the team map"; it is not looked up by name in Linear.
+A resolved project is always queried by its `linear_project_id` UUID, never by name. A project that is not in the map is answered as "not in the team map"; it is not looked up by name in Linear, except `ask`'s one-time discovery search (`skills/ask`, step 3), which answers "not in the team map", never assigns a colour, and offers `setup refresh`.
 
 ## Teams
 

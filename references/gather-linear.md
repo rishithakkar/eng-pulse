@@ -45,6 +45,10 @@ Compute once, in the team map's `timezone`:
 11. **Relations.** Issue-relation (blocked-by) tools exist but their exact names are unconfirmed. On the first run capture them with one `tools/list` and add them to `references/tool-names.json`; until then read `blocked_by` from `get_issue` when present, else `[]`.
 12. **Last activity.** For `started` candidates whose `updatedAt` is older than `thresholds.idle_issue_days`, call `list_comments(issueId=<id>, limit=1, orderBy="createdAt")` and take the newer of that comment and `updatedAt`.
 
+## Discovery search (`ask` only)
+
+For an entity the team map cannot resolve, `skills/ask` (step 3) may search once: `list_projects(query=<text>)`, `list_issues(query=<text>, limit=25)` and, for a person, `list_users(query=<text>)`. The `query` parameter on these tools is unconfirmed: verify on first run and fix it here; if a call rejects it, report the tool error in a coverage line rather than guessing another parameter. Results are discovery only: they are never added to `issues` and never raise a signal.
+
 Rate limits are generous (thousands of requests per hour); the constraint is result size, not call count.
 
 ## Absence and degradation
