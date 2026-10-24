@@ -6,6 +6,8 @@ Run any skill against saved data instead of live connectors, for evals, demos an
 
 If the user's message names a fixtures folder — `fixtures: <path>` or `--from-fixtures <path>` — use fixture mode for the whole run.
 
+A relative `<path>` resolves against the working directory first (the connected folder in Cowork, the eval's working directory), then against the plugin root (the folder that holds `.claude-plugin/`), so `tests/fixtures/board_mismatch` finds the sample shipped with the plugin. If neither holds `<path>/team-map.yaml`, stop and say which two locations were tried.
+
 ## Contract
 
 1. Read `<path>/team-map.yaml` as the team map (validate it against `schemas/team-map.schema.json` as usual).

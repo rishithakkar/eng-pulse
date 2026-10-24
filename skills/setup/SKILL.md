@@ -18,7 +18,7 @@ Discover first, ask second. The map is the only company-specific file eng-pulse 
 
 ## Pick the mode
 
-- **New**: no `team-map.yaml` exists → steps 1–6.
+- **New**: no `team-map.yaml` exists → steps 1–6. If the user asks to set up eng-pulse but a map already exists, never overwrite it: ask "A team map already exists. Refresh it instead (step 7)?" and run step 7 on yes; start over with steps 1–6 only if the user explicitly asks to replace it.
 - **Refresh**: a map exists and the user says "refresh", "add a person/project", or "update the team map" → step 7.
 - **Validate**: the user hands you a map (hand-edited, or "check my map") → step 5, then step 6.
 
@@ -36,7 +36,7 @@ Look for an existing map at the root of the connected folder (Cowork), in Projec
 
 Live (only tools from `references/tool-names.json`; pass only the parameters named here):
 
-- Linear: `list_teams`, `list_projects`, `list_users`. For each project, `get_project(query=<project UUID>, includeResources: true)` and collect github.com repo links from its resources as repo candidates. If Linear rejects `includeResources`, call `get_project(query=<project UUID>)` without it and ask the user for repos instead.
+- Linear: `list_teams`, `list_projects`, `list_users`. For each project, `get_project(query=<project UUID>, includeResources: true)` (`includeResources` is unconfirmed; verify on first live run) and collect github.com repo links from its resources as repo candidates. If Linear rejects `includeResources`, call `get_project(query=<project UUID>)` without it and ask the user for repos instead.
 - GitHub: there is no repo-listing tool on the allowlist. Repo candidates are the links found above; the user confirms `github_org` and the repos per project in step 4.
 - Slack: `slack_search_channels` for each project name and alias; `slack_search_users` or `slack_read_user_profile` to read emails for people you are joining.
 
@@ -50,7 +50,7 @@ Show one proposal before asking anything, in three tables:
 
 - **Projects**: name, Linear project UUID (exactly as discovered), suggested Slack channels (names similar to the project name, e.g. `#proj-<name>`), suggested repos (from resources or `github.repos` by name similarity), suggested owner (or "ask").
 - **Teams**: name, Linear team UUID, members if known; lead and manager are "unknown — please tell me".
-- **People**: proposed key (lowercase first name; add the last initial on a clash), name, Linear id, Slack id, GitHub login, and how each join was made. Join in the order of `references/identity.md`: **by email first** (Linear `email` = Slack `profile.email`), then by case-insensitive full name. Mark every join "guess (email match)" or "guess (name match)". Leave a field empty rather than guess a login you did not see.
+- **People**: proposed key (lowercase first name; add the last initial on a clash), name, Linear id, Slack id, GitHub login, and how each join was made. Join **by email first** (Linear `email` = Slack `profile.email`), then by case-insensitive full name. Mark every join "guess (email match)" or "guess (name match)". Leave a field empty rather than guess a login you did not see.
 
 List what you could not match (for example a Slack user with no Linear user) instead of dropping it.
 

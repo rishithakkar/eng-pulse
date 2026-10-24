@@ -17,7 +17,7 @@ Team leads and engineering managers who balance work across the team. They see p
    4. **Board mismatches**: `board_mismatch` flags.
    5. **Blocked**: `blocked` flags.
    6. **Review queue**: open PRs waiting on each requested reviewer, as a count per reviewer in name order, linked to the PRs.
-4. **Projects**: `health` and `forecast_risk` flags, under the project they attach to.
+4. **Projects**: one line per project in map order: the latest update's health and age, linked to the update, and the active cycle's working days left and unstarted count (or "No active cycle"); then its `health` and `forecast_risk` flags under it.
 5. **Unmapped**: flags that attach to no project, with the suggestion to run `setup`.
 6. **Coverage**: the last line (see Rules).
 

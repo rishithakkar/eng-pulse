@@ -55,7 +55,7 @@ what's stuck today?
 fixtures: tests/fixtures/board_mismatch
 ```
 
-Fixture mode makes no connector calls, uses the fixture's own clock, never posts to Slack and never saves reports. The path is relative to the plugin folder. If Claude cannot find it, connect a clone of this repo as a folder and use the same prompt. The expected exec brief for this fixture is in `references/formats/examples/exec-brief.md`.
+Fixture mode makes no connector calls, uses the fixture's own clock, never posts to Slack and never saves reports. A relative path is looked up in the working directory first, then in the plugin folder, so the prompts work as written in both Claude.ai and Cowork. If Claude still cannot find it, connect a clone of this repo as a folder (Cowork) and use the same prompt. The expected exec brief for this fixture is in `references/formats/examples/exec-brief.md`.
 
 ## How it decides what to flag
 

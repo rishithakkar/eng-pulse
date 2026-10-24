@@ -42,6 +42,7 @@ Ask "Run the daily report. I'm the <role>; give me the <format> as <destination>
 | lead × Slack | Slack post format, draft-first. Only flag owners mentioned. Owners without a Slack id written as plain names. | | | |
 | Cowork: any run with a folder connected | `reports/YYYY-MM-DD.html` and `.json` saved. A second run the same day overwrites them. | | | |
 | Remembered preference: run again with no audience or destination stated | Uses the stored `report_preferences` entry without asking | | | |
+| Remembered Slack preference: answer the step 2 question with "Slack post" only, then run again | The stored entry has `destination: slack` and no `audience`, the map still validates, and the second run drafts the Slack post without asking | | | |
 
 ## 3. `--dry-run` and degradation
 
@@ -73,3 +74,15 @@ The gather recipes mark these as unconfirmed. Check each against the live tools 
 | Linear issue-relation (blocked-by) tool names | Names captured from `tools/list` and added to `references/tool-names.json` and `references/gather-linear.md` step 11 | | | |
 | Linear `list_issues(query=<text>, limit=25)` (and `query` on `list_projects` and `list_users`) accepts `query` | Accepted. If not, fix the parameter in `references/gather-linear.md` ("Discovery search"). | | | |
 | Also: `list_issues` paging fields `hasNextPage` / `endCursor` | Present under those names. If not, fix `references/gather-linear.md` step 5. | | | |
+| Linear `list_issues(team=…, state=<completed status>, updatedAt=…)` for `ask`'s "what did <team> ship?" | Accepted together. If not, fix `references/gather-linear.md` ("Shipped in window"). | | | |
+| Linear `get_project(query=<UUID>, includeResources: true)` in `setup` | Accepted and returns resources with repo links. If rejected, the fallback without it runs; fix `skills/setup/SKILL.md` step 2. | | | |
+| Slack `slack_read_channel(channel_id, oldest, latest)` parameter names, and its cursor field | Names match the tool schema. If not, fix `references/gather-slack.md` step 2. | | | |
+| Slack reactions: a blocker thread whose root has a ✅ reaction and no reply | Reactions come from the read payload or `slack_get_reactions(channel_id, message_ts)`; the thread counts as answered and does not flag. If reactions cannot be read, the `Slack reactions unreadable …` coverage line appears. Fix names in `references/gather-slack.md` step 6 and `references/tool-names.json`. | | | |
+| GitHub Route B: the OAuth App callback URL `https://claude.ai/api/mcp/auth_callback` (`CONNECTORS.md`) | Sign-in completes. If GitHub rejects the callback, record the URL that works and fix `CONNECTORS.md`. | | | |
+
+## 6. Try it offline (README)
+
+| Step | Expected | Result | Date | Notes |
+|---|---|---|---|---|
+| Claude.ai, plugin installed, no folder: send both README "Try it offline" prompts as written | `fixtures: tests/fixtures/board_mismatch` resolves to the plugin's copy. Exec brief matches `references/formats/examples/exec-brief.md` in substance; "what's stuck" lists PLT-106 and GRO-205. No connector calls. | | | |
+| Cowork, plugin installed, a folder connected that has no `tests/` folder: send the same prompts | The path falls back from the folder to the plugin root and the same answers come back. With a clone of this repo connected, the folder copy is used. | | | |

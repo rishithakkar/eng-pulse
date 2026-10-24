@@ -38,7 +38,6 @@
 **Moved since Mon 26 Oct 18:00**
 
 - [PR #11](https://github.com/acme/mobile-app/pull/11) "GRO-205 OTP entry screen" opened Mon 23:00, review requested.
-- [GRO-200](https://linear.app/acme/issue/GRO-200/passwordless-sign-in) updated Tue 03:00, still In Progress.
 - [#proj-onboarding thread](https://acme.slack.com/archives/C0ONBOARD/p1761535000000200), 5 replies: > "Design review for the OTP entry screen: final copy and error states attached, comments welcome."
 
 **Flags**
