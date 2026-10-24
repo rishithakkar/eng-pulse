@@ -10,3 +10,7 @@ Thumbs.db
 
 # SDD scratch
 .superpowers/
+
+# Python
+__pycache__/
+.pytest_cache/

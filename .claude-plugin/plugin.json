@@ -1,0 +1,8 @@
+{
+  "name": "eng-pulse",
+  "version": "0.1.0",
+  "description": "Turns Linear, GitHub and Slack into daily engineering status reports and ad-hoc answers for leaders, with owners you can ping and what is stuck or at risk.",
+  "author": { "name": "Rishi Thakkar" },
+  "license": "MIT",
+  "keywords": ["linear", "github", "slack", "standup", "engineering-management", "status-report"]
+}
