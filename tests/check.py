@@ -1,6 +1,7 @@
 """Structural and behavioural checks for the eng-pulse plugin."""
 import json
 import re
+import subprocess
 from pathlib import Path
 
 import jsonschema
@@ -482,3 +483,23 @@ def test_daily_report_eval_cases_and_fixture_copies():
     lin = json.loads((fx / "linear.json").read_text())
     assert uuid not in json.dumps({k: v for k, v in lin.items() if k != "coverage_notes"})
     assert any(extra[0]["name"] in n and uuid in n for n in lin["coverage_notes"])
+
+
+def test_eval_input_files_are_tracked_by_git():
+    root = repo_root()
+    try:
+        out = subprocess.run(["git", "ls-files", "skills"], cwd=root, capture_output=True,
+                             text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        import pytest
+        pytest.skip("not a git checkout")
+    tracked = set(out.splitlines())
+    maps = sorted(p.relative_to(root).as_posix()
+                  for p in root.glob("skills/*/evals/**/team-map.yaml"))
+    assert maps, "no eval team maps found"
+    assert [m for m in maps if m not in tracked] == []
+    # no eval input may be swallowed by .gitignore
+    files = [p.relative_to(root).as_posix() for p in root.glob("skills/*/evals/**/*") if p.is_file()]
+    ignored = subprocess.run(["git", "check-ignore", "--no-index", *files], cwd=root,
+                             capture_output=True, text=True).stdout.split()
+    assert ignored == []

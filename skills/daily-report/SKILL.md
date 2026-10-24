@@ -101,4 +101,4 @@ When a folder is connected and this is not fixture mode, save `reports/YYYY-MM-D
 
 ## Reply
 
-Lead with the report (or the published artifact and its TL;DR). End with one line saying what was delivered and saved, and which connectors were missing.
+Lead with the report (or the published artifact and its TL;DR). End with one line saying what was delivered and saved; for missing connectors, point to the report's coverage line rather than restating it.
