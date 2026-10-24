@@ -398,3 +398,19 @@ def test_dashboard_template_ships_the_sample_data():
     assert html.count('id="pulse-data"') == 1   # Claude's block swap must have one target
     m = re.search(r'<script id="pulse-data" type="application/json">(.*?)</script>', html, re.DOTALL)
     assert m and json.loads(m.group(1)) == json.loads(read("tests/fixtures/sample-pulse-data.json"))
+
+
+# --- Task 7: setup skill evals ------------------------------------------------
+
+def test_every_skill_has_at_least_two_eval_cases_in_cli_layout():
+    # Ruling 3: only skills that already ship an evals/ folder; a later task
+    # asserts that every skill has one.
+    with_evals = [d for d in skill_dirs() if (d / "evals").is_dir()]
+    assert "setup" in {d.name for d in with_evals}
+    for d in with_evals:
+        cases = [c for c in (d/"evals").iterdir() if c.is_dir()]
+        assert len(cases) >= 2, d.name
+        for c in cases:
+            assert (c/"prompt.md").exists() and (c/"case.yaml").exists()
+            assert list((c/"graders").glob("*.md")), c
+            cy = load_yaml(c/"case.yaml"); assert cy["schema_version"] == "1.1" and cy["name"] == c.name

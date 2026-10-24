@@ -1,0 +1,67 @@
+eng_pulse_version: 1
+company: Northwind
+timezone: Asia/Kolkata
+working_days: [Mon, Tue, Wed, Thu, Fri]
+thresholds:
+  review_wait_hours: 24
+  stale_pr_hours: 48
+  contested_comments: 15
+  idle_issue_days: 3
+  blocker_unanswered_hours: 4
+  wip_warn: 4
+  health_stale_days: 7
+github_org: northwind
+projects:
+  - name: Billing Revamp
+    aliases: [billing]
+    linear_project_id: "7c1e9a54-0d3b-4f6a-b2c8-5e9d1f3a7b40"
+    repos: [northwind/billing-api, northwind/billing-web]
+    slack_channels: ["#proj-billing"]
+    owner: asha
+  - name: iOS Checkout
+    aliases: [checkout]
+    linear_project_id: "8d2fab65-1e4c-4a7b-93d9-6fae2a4b8c51"
+    repos: [northwind/ios-app]
+    slack_channels: ["#ios-checkout"]
+    owner: rohan
+teams:
+  - name: Core Platform
+    linear_team_id: "0b6f3c1e-2a4d-4c8e-9f10-3d5e7a9b1c21"
+    lead: li
+    manager: fatima
+    members: [asha, li, carlos]
+  - name: Mobile
+    linear_team_id: "1c7a4d2f-3b5e-4d9f-8a21-4e6f8b0c2d32"
+    lead: rohan
+    manager: fatima
+    members: [rohan]
+people:
+  asha:
+    name: Asha Verma
+    role: PM
+    linear: "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c01"
+    github: asha-v
+    slack: U02ASHA001
+  rohan:
+    name: Rohan Mehta
+    role: Tech Lead
+    linear: "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c02"
+    github: rohan-m
+    slack: U02ROHN002
+  li:
+    name: Li Wei
+    role: Tech Lead
+    linear: "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c03"
+    github: liwei
+    slack: U02LIWE003
+  carlos:
+    name: Carlos Diaz
+    role: Engineer
+    linear: "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c04"
+    github: carlos-d
+    slack: U02CARL004
+  fatima:
+    name: Fatima Khan
+    role: Engineering Manager
+    linear: "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c05"
+    slack: U02FATI006

@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: refuses-invalid-map
+expected_outcome: |
+  team-map.yaml is valid except that the Billing Revamp project's owner is `ravi`, which
+  is not a key in people. The run refuses: its reply begins with "Map not written:"
+  followed by a numbered list of fixes that names `ravi` as the missing people key, and it
+  leaves team-map.yaml unchanged.
+context:
+  scaffold_script: place-files.sh
