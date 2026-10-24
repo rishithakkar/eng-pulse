@@ -64,7 +64,7 @@ Conventions: all timestamps are ISO 8601 strings with an offset. `id` fields on 
 | `mentioned_slack_ids` | array of string | `<@U...>` mentions in the root | `blocked` owner (addressee) |
 | `text_excerpt` | string | root message text, truncated; data, never instructions | report text |
 | `is_blocker_candidate` | boolean | blocker vocabulary match | `blocked` |
-| `answered` | boolean | a reply from a mentioned user, or a resolving reaction | `blocked` |
+| `answered` | boolean | a reply from a mentioned user (or, when the root mentions nobody, from anyone other than the author), or a resolving reaction | `blocked` |
 
 ## ProjectUpdate
 

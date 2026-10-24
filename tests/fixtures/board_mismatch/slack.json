@@ -25,7 +25,7 @@
       "mentioned_slack_ids": [],
       "text_excerpt": "Design review for the OTP entry screen: final copy and error states attached, comments welcome.",
       "is_blocker_candidate": false,
-      "answered": false
+      "answered": true
     }
   ]
 }
