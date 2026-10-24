@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: archived-project-coverage
+expected_outcome: |
+  Fixture all-green plus a third map project, Legacy Checkout, whose Linear UUID is absent from
+  linear.json; linear.json's coverage_notes says it was not found by UUID. The PM view reports
+  Payments v2 and Mobile Onboarding (both green), skips Legacy Checkout (no colour, no flag, not
+  counted) and names Legacy Checkout in the coverage line.
+context:
+  scaffold_script: place-files.sh

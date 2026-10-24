@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: slack-post-is-draft-first
+expected_outcome: |
+  Fixture board_mismatch, destination slack. Fixture mode makes the post preview-only: the run
+  renders the Slack message per slack-post.md in the conversation, asks for confirmation or says it
+  will not be posted, and calls no Slack send tool. The PLT-106 flag mentions Priya S as
+  <@U0123ABC>; the GRO-205 flag (inferred) names Lena M as plain text because she has no Slack id.
+context:
+  scaffold_script: place-files.sh

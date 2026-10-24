@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: degrades-without-github
+expected_outcome: |
+  Fixture no-github: github.json has connected: false and linear.json already carries the GitHub
+  coverage line. The PM view reports the Linear and Slack flags (idle_issue on PLT-118, owner
+  Priya S; blocked on the #proj-onboarding thread, owner Arjun K), colours Payments v2 yellow and
+  Mobile Onboarding red, raises no PR-based signal, and states the GitHub coverage line exactly
+  once.
+context:
+  scaffold_script: place-files.sh

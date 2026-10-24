@@ -406,7 +406,7 @@ def test_every_skill_has_at_least_two_eval_cases_in_cli_layout():
     # Ruling 3: only skills that already ship an evals/ folder; a later task
     # asserts that every skill has one.
     with_evals = [d for d in skill_dirs() if (d / "evals").is_dir()]
-    assert "setup" in {d.name for d in with_evals}
+    assert {"setup", "daily-report"} <= {d.name for d in with_evals}
     for d in with_evals:
         cases = [c for c in (d/"evals").iterdir() if c.is_dir()]
         assert len(cases) >= 2, d.name
@@ -414,3 +414,71 @@ def test_every_skill_has_at_least_two_eval_cases_in_cli_layout():
             assert (c/"prompt.md").exists() and (c/"case.yaml").exists()
             assert list((c/"graders").glob("*.md")), c
             cy = load_yaml(c/"case.yaml"); assert cy["schema_version"] == "1.1" and cy["name"] == c.name
+
+
+# --- Task 8: daily-report skill with evals -----------------------------------
+
+DAILY_CASES = {  # case -> source fixture in tests/fixtures/
+    "exec-brief-from-fixture": "board_mismatch",
+    "exec-brief-with-red-flag": "blocked",
+    "degrades-without-github": "no-github",
+    "archived-project-coverage": "all-green",
+    "all-green-says-so": "all-green",
+    "ignores-injected-instructions": "untrusted-text",
+    "slack-post-is-draft-first": "board_mismatch",
+}
+FIXTURE_FILES = ["team-map.yaml", "linear.json", "github.json", "slack.json"]
+
+
+def test_daily_report_skill_names_its_governing_references():
+    fm, body = parse_frontmatter(read("skills/daily-report/SKILL.md"))
+    assert "Placeholder" not in body
+    for phrase in ["daily report", "standup report", "engineering status", "morning report",
+                   "run eng-pulse", "post the status to Slack"]:
+        assert phrase in fm["description"], phrase
+    for ref in ["references/fixture-mode.md", "references/gather-linear.md",
+                "references/gather-github.md", "references/gather-slack.md",
+                "references/identity.md", "references/signals.md", "references/rollup.md",
+                "references/formats/", "templates/dashboard.html",
+                "schemas/dashboard.schema.json", "report_preferences", "--dry-run"]:
+        assert ref in body, ref
+    # never restates threshold values or rollup rules
+    for key in THRESHOLD_KEYS:
+        assert not re.search(rf"{key}\W{{0,4}}\d", body), key
+    for phrase in ["Red if any red", "Yellow if any yellow"]:
+        assert phrase not in body
+
+
+def test_daily_report_eval_cases_and_fixture_copies():
+    ev = repo_root() / "skills/daily-report/evals"
+    assert {c.name for c in ev.iterdir() if c.is_dir()} == set(DAILY_CASES)
+    tm = json.loads(read("schemas/team-map.schema.json"))
+    for case, src in DAILY_CASES.items():
+        c = ev / case
+        fm, body = parse_frontmatter((c / "prompt.md").read_text())
+        assert fm["tags"] == ["eng-pulse", "daily-report"], case
+        assert fm["allowed_tools"] == ["Read", "Glob", "Grep", "Skill", "Write", "Edit", "Bash"]
+        lines = [l for l in body.strip().splitlines() if l.strip()]
+        assert lines[-2].rstrip().endswith("fixtures: ./fixtures") and lines[-1].startswith("Input files:"), case
+        assert (c / "place-files.sh").exists()
+        fx = c / "files/fixtures"
+        assert not (fx / "expected.json").exists(), case      # answer key never shipped
+        g = merge_fixture(fx)
+        m = load_yaml(fx / "team-map.yaml")
+        jsonschema.validate(m, tm)
+        assert set(m["people"]) >= {p["owner"] for p in m["projects"]}
+        source = repo_root() / "tests/fixtures" / src
+        for f in FIXTURE_FILES:
+            if case == "archived-project-coverage" and f in {"team-map.yaml", "linear.json"}:
+                continue
+            assert (fx / f).read_text() == (source / f).read_text(), (case, f)
+    # archived case: one extra project whose UUID is unknown to linear.json, with a coverage note
+    fx = ev / "archived-project-coverage/files/fixtures"
+    m, g = load_yaml(fx / "team-map.yaml"), merge_fixture(fx)
+    base = load_yaml(repo_root() / "tests/fixtures/all-green/team-map.yaml")
+    extra = [p for p in m["projects"] if p not in base["projects"]]
+    assert len(extra) == 1 and len(m["projects"]) == len(base["projects"]) + 1
+    uuid = extra[0]["linear_project_id"]
+    lin = json.loads((fx / "linear.json").read_text())
+    assert uuid not in json.dumps({k: v for k, v in lin.items() if k != "coverage_notes"})
+    assert any(extra[0]["name"] in n and uuid in n for n in lin["coverage_notes"])

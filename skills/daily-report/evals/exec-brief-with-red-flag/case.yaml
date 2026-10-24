@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: exec-brief-with-red-flag
+expected_outcome: |
+  Fixture blocked. PLT-108 (Payments v2) is blocked by the open issue PLT-109, so Payments v2 is
+  red and Mobile Onboarding is green. The exec brief gives Payments v2 one risk → impact → what's
+  being done → ask entry linked to PLT-108, with the ask dated from data (no cycle and no target
+  date, so "re-checked in tomorrow's report", Wed 28 Oct). GRO-208 (blocker is Done) and the Slack
+  thread that is inside the unanswered-blocker threshold are not flagged. No person is named.
+context:
+  scaffold_script: place-files.sh

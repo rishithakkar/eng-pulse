@@ -1,0 +1,51 @@
+{
+  "connected": true,
+  "prs": [
+    {
+      "url": "https://github.com/acme/payments-api/pull/51",
+      "repo": "acme/payments-api",
+      "number": 51,
+      "title": "PLT-116 Jitter webhook retries",
+      "author_login": "arjun-k",
+      "draft": false,
+      "state": "merged",
+      "created_at": "2026-10-24T11:00:00+05:30",
+      "updated_at": "2026-10-25T17:00:00+05:30",
+      "last_commit_at": "2026-10-25T15:00:00+05:30",
+      "last_comment_at": "2026-10-25T16:00:00+05:30",
+      "review_state": "approved",
+      "changes_requested_count": 0,
+      "review_comment_count": 1,
+      "requested_reviewer_logins": [],
+      "checks": "passing",
+      "merged_at": "2026-10-25T17:00:00+05:30",
+      "linked_issue_identifiers": [
+        "PLT-116"
+      ]
+    },
+    {
+      "url": "https://github.com/acme/mobile-app/pull/12",
+      "repo": "acme/mobile-app",
+      "number": 12,
+      "title": "GRO-218 Skeleton loaders",
+      "author_login": "lena-m",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-26T13:00:00+05:30",
+      "updated_at": "2026-10-26T13:00:00+05:30",
+      "last_commit_at": "2026-10-26T13:00:00+05:30",
+      "last_comment_at": "2026-10-26T13:00:00+05:30",
+      "review_state": "required",
+      "changes_requested_count": 0,
+      "review_comment_count": 0,
+      "requested_reviewer_logins": [
+        "sam-r"
+      ],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "GRO-218"
+      ]
+    }
+  ]
+}
