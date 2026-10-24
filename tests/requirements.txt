@@ -2,3 +2,4 @@ pyyaml
 jsonschema
 pytest
 playwright
+rfc3339-validator

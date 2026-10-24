@@ -8,6 +8,9 @@ team-map.yaml
 # ...and the input maps of skill eval cases
 !skills/*/evals/**/team-map.yaml
 
+# Saved daily reports (company data)
+reports/
+
 # OS / editor
 .DS_Store
 Thumbs.db
