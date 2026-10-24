@@ -1,0 +1,132 @@
+{
+  "generated_at": "2026-10-27T07:00:00Z",
+  "company": "Acme",
+  "window": {"start": "2026-10-26T18:00:00Z", "end": "2026-10-27T07:00:00Z"},
+  "summary": {"red": 1, "yellow": 1, "green": 1},
+  "projects": [
+    {
+      "name": "Mobile Onboarding",
+      "status": "yellow",
+      "owner": {"name": "Daniel O", "slack_id": "U0456GRA"},
+      "progress_pct": 38,
+      "epics": [
+        {"name": "Passwordless sign-in", "done": 1, "total": 3},
+        {"name": "Welcome tour", "done": 2, "total": 5}
+      ],
+      "flags": ["f3", "f4", "f5"]
+    },
+    {
+      "name": "Search Revamp",
+      "status": "green",
+      "owner": {"name": "Ramesh K", "slack_id": null},
+      "progress_pct": 81,
+      "epics": [
+        {"name": "Typo-tolerant queries", "done": 4, "total": 4},
+        {"name": "Ranking v2", "done": 5, "total": 7}
+      ],
+      "flags": []
+    },
+    {
+      "name": "Payments v2",
+      "status": "red",
+      "owner": {"name": "Priya S", "slack_id": "U0123ABC"},
+      "progress_pct": 54,
+      "epics": [
+        {"name": "Card tokenisation", "done": 6, "total": 8},
+        {"name": "Refunds", "done": 1, "total": 6}
+      ],
+      "flags": ["f1", "f2", "f6"]
+    }
+  ],
+  "flags": [
+    {
+      "id": "f1",
+      "signal": "blocked",
+      "severity": "red",
+      "title": "PLT-112 Refund webhooks: blocked on ledger API access",
+      "url": "https://linear.app/acme/issue/PLT-112/refund-webhooks",
+      "owner": {"name": "Priya S", "slack_id": "U0123ABC"},
+      "next_action": "Priya S: unblock PLT-112 Refund webhooks, blocked for 3 days",
+      "inferred": false
+    },
+    {
+      "id": "f3",
+      "signal": "stuck_pr",
+      "severity": "yellow",
+      "title": "PR #11 GRO-205 OTP entry screen: no first review",
+      "url": "https://github.com/acme/mobile-app/pull/11",
+      "owner": {"name": "Aisha N", "slack_id": "U0456GRB"},
+      "next_action": "Aisha N: review PR #11 GRO-205 OTP entry screen, waiting 31h for a first review",
+      "inferred": false
+    },
+    {
+      "id": "f2",
+      "signal": "health",
+      "severity": "red",
+      "title": "Payments v2: latest project update says off track",
+      "url": "https://linear.app/acme/project/payments-v2/updates#update-7",
+      "owner": {"name": "Priya S", "slack_id": "U0123ABC"},
+      "next_action": "Priya S: post a project update for Payments v2 with a recovery plan",
+      "inferred": false
+    },
+    {
+      "id": "f4",
+      "signal": "board_mismatch",
+      "severity": "yellow",
+      "title": "GRO-206 Biometric unlock prompt: PR open, issue still Todo",
+      "url": "https://linear.app/acme/issue/GRO-206/biometric-unlock-prompt",
+      "owner": {"name": "Daniel O", "slack_id": "U0456GRA"},
+      "next_action": "Daniel O: move GRO-206 to the state its code is in",
+      "inferred": true
+    },
+    {
+      "id": "f5",
+      "signal": "stale_pr",
+      "severity": "yellow",
+      "title": "PR #9 Welcome tour carousel: untouched since last week",
+      "url": "https://github.com/acme/mobile-app/pull/9",
+      "owner": {"name": "Ramesh K", "slack_id": null},
+      "next_action": "Ramesh K: push, merge or close PR #9 Welcome tour carousel, untouched for 6 days",
+      "inferred": false
+    },
+    {
+      "id": "f6",
+      "signal": "idle_issue",
+      "severity": "yellow",
+      "title": "PLT-118 Partial refunds UI: In Progress with no activity",
+      "url": "https://linear.app/acme/issue/PLT-118/partial-refunds-ui",
+      "owner": {"name": "Mei C", "slack_id": "U0123ABF"},
+      "next_action": "Mei C: update PLT-118 or move it out of In Progress, no activity for 5 days",
+      "inferred": false
+    }
+  ],
+  "people": [
+    {"name": "Tom W", "slack_id": "U0123ABE", "team": "Platform", "wip": 2},
+    {"name": "Priya S", "slack_id": "U0123ABC", "team": "Platform", "wip": 3},
+    {"name": "Ramesh K", "slack_id": null, "team": "Platform", "wip": 4},
+    {"name": "Mei C", "slack_id": "U0123ABF", "team": "Platform", "wip": 2},
+    {"name": "Lucia F", "slack_id": "U0456GRD", "team": "Growth", "wip": 1},
+    {"name": "Daniel O", "slack_id": "U0456GRA", "team": "Growth", "wip": 3},
+    {"name": "Aisha N", "slack_id": "U0456GRB", "team": "Growth", "wip": 5},
+    {"name": "Jonas B", "slack_id": "U0456GRC", "team": "Growth", "wip": 2}
+  ],
+  "trend": [
+    {"date": "2026-10-14", "red": 0, "yellow": 3},
+    {"date": "2026-10-15", "red": 0, "yellow": 2},
+    {"date": "2026-10-16", "red": 1, "yellow": 2},
+    {"date": "2026-10-17", "red": 1, "yellow": 3},
+    {"date": "2026-10-18", "red": 0, "yellow": 3},
+    {"date": "2026-10-19", "red": 0, "yellow": 2},
+    {"date": "2026-10-20", "red": 0, "yellow": 4},
+    {"date": "2026-10-21", "red": 1, "yellow": 4},
+    {"date": "2026-10-22", "red": 1, "yellow": 5},
+    {"date": "2026-10-23", "red": 1, "yellow": 3},
+    {"date": "2026-10-24", "red": 1, "yellow": 3},
+    {"date": "2026-10-25", "red": 2, "yellow": 3},
+    {"date": "2026-10-26", "red": 2, "yellow": 5},
+    {"date": "2026-10-27", "red": 2, "yellow": 4}
+  ],
+  "coverage_notes": [
+    "Slack: #proj-search is not readable by the connector, so Slack signals for Search Revamp are omitted"
+  ]
+}

@@ -356,3 +356,45 @@ def test_every_flag_in_examples_carries_a_link():
         ex = read(f"references/formats/examples/{fmt}.md")
         flag_lines = [l for l in ex.splitlines() if l.lstrip().startswith(("- 🔴","- 🟡"))]
         assert flag_lines and all("http" in l for l in flag_lines)
+
+
+# --- Task 6: dashboard template and schema ------------------------------------
+
+def test_sample_pulse_data_validates():
+    jsonschema.validate(json.loads(read("tests/fixtures/sample-pulse-data.json")),
+                        json.loads(read("schemas/dashboard.schema.json")))
+
+
+def test_dashboard_schema_is_valid_draft2020_and_closed():
+    schema = json.loads(read("schemas/dashboard.schema.json"))
+    jsonschema.Draft202012Validator.check_schema(schema)
+    flag_signal = schema["properties"]["flags"]["items"]["properties"]["signal"]
+    assert set(flag_signal["enum"]) == SIGNAL_IDS
+
+    def walk(node):
+        if isinstance(node, dict):
+            if node.get("type") == "object":
+                assert node.get("additionalProperties") is False, node
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+    walk(schema)
+
+
+def test_dashboard_is_self_contained():
+    html = read("templates/dashboard.html")
+    srcs = re.findall(r'<(?:script|link)[^>]+(?:src|href)="(https?://[^"]+)"', html)
+    # Google Fonts is the only external resource allowed; none at all is fine too.
+    assert all(s.startswith("https://fonts.googleapis.com") or s.startswith("https://fonts.gstatic.com") for s in srcs)
+    assert not re.search(r"@import\s+url\(\s*['\"]?https?://(?!fonts\.googleapis\.com)", html)
+    assert 'id="pulse-data"' in html and "prefers-color-scheme: dark" in html
+    assert ':root[data-theme="dark"]' in html and "@media print" in html
+
+
+def test_dashboard_template_ships_the_sample_data():
+    html = read("templates/dashboard.html")
+    assert html.count('id="pulse-data"') == 1   # Claude's block swap must have one target
+    m = re.search(r'<script id="pulse-data" type="application/json">(.*?)</script>', html, re.DOTALL)
+    assert m and json.loads(m.group(1)) == json.loads(read("tests/fixtures/sample-pulse-data.json"))
