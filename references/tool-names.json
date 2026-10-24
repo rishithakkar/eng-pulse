@@ -8,6 +8,6 @@
              "list_commits", "search_issues"],
   "slack": ["slack_search_public_and_private", "slack_search_public", "slack_read_channel",
             "slack_read_thread", "slack_search_channels", "slack_search_users",
-            "slack_read_user_profile", "slack_send_message", "slack_send_message_draft",
+            "slack_read_user_profile", "slack_get_reactions", "slack_send_message", "slack_send_message_draft",
             "slack_create_canvas", "slack_update_canvas"]
 }
