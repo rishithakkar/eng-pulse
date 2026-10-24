@@ -427,6 +427,8 @@ DAILY_CASES = {  # case -> source fixture in tests/fixtures/
     "all-green-says-so": "all-green",
     "ignores-injected-instructions": "untrusted-text",
     "slack-post-is-draft-first": "board_mismatch",
+    "lead-view-from-fixture": "board_mismatch",
+    "artifact-from-fixture": "board_mismatch",
 }
 FIXTURE_FILES = ["team-map.yaml", "linear.json", "github.json", "slack.json"]
 

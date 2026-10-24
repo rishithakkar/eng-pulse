@@ -121,6 +121,10 @@ unzip -l /tmp/eng-pulse.plugin | grep -E "team-map.yaml|superpowers"   # only fi
 
 Never ship a root `team-map.yaml`.
 
+## Known gaps
+
+- **No per-signal dry-run evals.** Each signal has a fixture and an answer key (`tests/fixtures/<id>/expected.json`), and the report-level evals cover `board_mismatch`, `blocked`, the no-GitHub degradation and injected text, but no eval runs `daily-report --dry-run` on each signal's fixture and grades its flags against `expected.json`. Until one exists, check a new or changed signal by hand: run `Run the daily report --dry-run` with `fixtures: tests/fixtures/<id>` and compare the printed flags with `expected.json`.
+
 ## Commits and PRs
 
 - Conventional prefixes, as in the history: `feat:`, `fix:`, `docs:`, `test:`, `chore:`. Short imperative subject, for example `fix: stuck_pr ignores conversation comments`.

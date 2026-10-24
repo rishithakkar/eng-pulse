@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: lead-view-from-fixture
+expected_outcome: |
+  Fixture board_mismatch, audience lead, destination markdown. The run uses fixture mode with no
+  connector calls and renders the lead view in the conversation. Per team in map order (Platform,
+  then Growth), WIP per person lists every member in alphabetical name order with their started
+  issues (Platform: Arjun K 0, Priya S 1 — PLT-106; Growth: Lena M 0, Sam R 1 — GRO-200), never
+  sorted by count and with no ranking wording. There are no stuck, stale or contested PRs; the
+  review queue shows Sam R as the requested reviewer on PR #11. Exactly two flags, both
+  board_mismatch: PLT-106 (owner Priya S) and GRO-205 (owner Lena M, inferred). PLT-107 and GRO-206
+  are not flagged. The report ends with a coverage line including source: fixtures.
+context:
+  scaffold_script: place-files.sh
