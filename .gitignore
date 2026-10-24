@@ -7,3 +7,6 @@ team-map.yaml
 # OS / editor
 .DS_Store
 Thumbs.db
+
+# SDD scratch
+.superpowers/
