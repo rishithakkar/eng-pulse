@@ -2,7 +2,6 @@
 import copy
 import json
 import re
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -34,11 +33,13 @@ def browser():
 
 
 @pytest.fixture
-def page(browser):
+def page(browser, tmp_path):
     ctx = browser.new_context(viewport={"width": 1280, "height": 900})
     pg = ctx.new_page()
     pg.set_default_timeout(10_000)
     pg.console_errors = []
+    pg.tmp_dir = tmp_path   # render() writes here; pytest cleans it up
+    pg.renders = 0
     pg.on("console", lambda m: m.type == "error" and pg.console_errors.append(m.text))
     pg.on("pageerror", lambda e: pg.console_errors.append(str(e)))
     yield pg
@@ -51,7 +52,8 @@ def render(page, data):
     assert DATA_BLOCK.search(html), "template has no pulse-data block"
     payload = json.dumps(data).replace("</", "<\\/")
     html = DATA_BLOCK.sub(lambda m: m.group(1) + payload + m.group(3), html, count=1)
-    tmp = Path(tempfile.mkdtemp()) / "dashboard.html"
+    page.renders += 1
+    tmp = page.tmp_dir / f"dashboard-{page.renders}.html"
     tmp.write_text(html)
     page.goto(tmp.as_uri())
     page.wait_for_selector("#app[data-rendered]", state="attached")
@@ -168,3 +170,28 @@ def test_print_hides_trend_and_people(page):
     page.emulate_media(media="print")
     assert not page.locator("#trend").is_visible()
     assert not page.locator("#people").is_visible()
+
+
+def _luminance(rgb: str) -> float:
+    r, g, b = (int(v) for v in re.findall(r"\d+", rgb)[:3])
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def _assert_prints_dark_on_light(page):
+    page.emulate_media(media="print")
+    body = page.evaluate("(() => { const s = getComputedStyle(document.body);"
+                         " return [s.color, s.backgroundColor]; })()")
+    assert _luminance(body[0]) < 80, body      # dark ink
+    assert _luminance(body[1]) > 230, body     # white paper
+
+
+def test_print_is_dark_ink_on_light_under_dark_scheme(page):
+    page.emulate_media(color_scheme="dark")
+    render(page, SAMPLE)
+    _assert_prints_dark_on_light(page)
+
+
+def test_print_is_dark_ink_on_light_under_dark_theme_attribute(page):
+    render(page, SAMPLE)
+    page.evaluate("document.documentElement.dataset.theme = 'dark'")
+    _assert_prints_dark_on_light(page)
