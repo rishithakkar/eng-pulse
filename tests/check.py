@@ -234,3 +234,80 @@ def test_rubric_names_thresholds_never_values():
     text = read("references/signals.md") + read("references/rollup.md")
     for key in THRESHOLD_KEYS:
         assert not re.search(rf"{key}\W{{0,4}}\d", text), key
+
+
+# --- Task 4: gather recipes, identity, fixture mode, connectors ---------------
+
+FORBIDDEN_TOOL_NAMES = {"get_pull_request_reviews", "get_pull_request_status",
+                        "get_pull_request", "list_project_updates", "create_comment"}
+
+
+def test_recipes_use_only_allowlisted_tool_names():
+    allow = json.loads(read("references/tool-names.json"))
+    known = set().union(*(v for k, v in allow.items() if not k.startswith("_")))
+    plausible = known | FORBIDDEN_TOOL_NAMES
+    for c in ["linear", "github", "slack"]:
+        text = read(f"references/gather-{c}.md")
+        for bad in FORBIDDEN_TOOL_NAMES:
+            assert not re.search(rf"\b{bad}\b", text), (c, bad)
+        mentioned = set(re.findall(r"`([a-z_]+)`", text)) & plausible
+        assert mentioned <= set(allow[c]) | known, (c, mentioned - known)
+
+
+def test_linear_recipe_enforces_uuid_rule():
+    t = read("references/gather-linear.md")
+    assert "UUID" in t and "never by name" in t.lower()
+
+
+def test_github_recipe_uses_search_qualifiers_and_degrades():
+    t = read("references/gather-github.md")
+    for q in ["org:", "is:pr", "is:open", "draft:false", "review:required", "updated:>="]:
+        assert q in t
+    assert "not connected" in t.lower()
+
+
+def test_slack_recipe_lists_blocker_vocabulary():
+    t = read("references/gather-slack.md")
+    for w in ["blocked", "waiting on", "any update", "ETA"]:
+        assert w in t
+
+
+def test_every_recipe_has_produces_section_covering_model_fields():
+    model_fields = {"issues", "prs", "threads", "project_updates", "cycles"}
+    produced = set()
+    for c in ["linear", "github", "slack"]:
+        sec = read(f"references/gather-{c}.md").split("## Produces", 1)[1]
+        produced |= {f for f in model_fields if f in sec}
+    assert produced == model_fields
+
+
+def test_connectors_md_has_github_setup_routes():
+    t = read("CONNECTORS.md")
+    assert "api.githubcopilot.com/mcp/readonly" in t
+    assert "X-MCP-Toolsets" in t and "Bearer" in t and "OAuth" in t
+    assert "~~project tracker" in t and "~~source control" in t and "~~chat" in t
+
+
+def test_fixture_mode_contract():
+    t = read("references/fixture-mode.md")
+    for s in ["team-map.yaml", "linear.json", "github.json", "slack.json", "no connector calls"]:
+        assert s in t
+
+
+def test_recipe_coverage_lines_match_sources_required():
+    sigs = parse_signals(repo_root() / "references/signals.md")
+    for c, name in [("linear", "Linear"), ("github", "GitHub"), ("slack", "Slack")]:
+        text = read(f"references/gather-{c}.md")
+        line = re.search(rf"`{name} not connected — ([^`]+) omitted`", text)
+        assert line, c
+        needing = {s for s, b in sigs.items() if c in b["sources_required"]}
+        listed = set(re.findall(r"[a-z]+_[a-z_]+|blocked|overloaded|health", line.group(1)))
+        assert needing <= listed, (c, needing - listed)
+
+
+def test_recipes_and_guides_name_thresholds_never_values():
+    for f in ["gather-linear.md", "gather-github.md", "gather-slack.md", "identity.md",
+              "fixture-mode.md"]:
+        text = read(f"references/{f}")
+        for key in THRESHOLD_KEYS:
+            assert not re.search(rf"{key}\W{{0,4}}\d", text), (f, key)

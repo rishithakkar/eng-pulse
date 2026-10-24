@@ -67,6 +67,6 @@
   ],
   "cycles": [],
   "coverage_notes": [
-    "GitHub not connected — stuck_pr, stale_pr, contested_pr, board_mismatch omitted"
+    "GitHub not connected — stuck_pr, stale_pr, contested_pr, board_mismatch and the linked-PR activity check of idle_issue omitted"
   ]
 }
