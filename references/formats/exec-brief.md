@@ -23,6 +23,7 @@ Green projects get their project line and nothing else.
 
 - **Under 250 words**, title to coverage line.
 - **No individuals.** No people's names, handles or mentions, no per-person counts. Say "the owner", "the team". Owners appear in the PM and lead views.
+- **The dashboard artifact is an overview and keeps owners**; this brief's "no individuals" rule covers the written brief only (see `skills/daily-report/SKILL.md`, step 7, PULSE_DATA).
 - **No task lists.** Never list issues, PRs or commits; summarise them as counts on the project line.
 - **Every flag links its source.** A shown flag (`- 🔴`/`- 🟡` line) ends with the link to its issue, thread or project update; a count links the items it counts.
 - **Inferred** flags, and any count or risk that includes one, carry the word *inferred*.

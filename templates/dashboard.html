@@ -149,6 +149,7 @@ a.ping:hover { background: var(--surface-2); }
 
 /* Lower grid */
 .lower { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.lower.solo { grid-template-columns: minmax(0, 1fr); }
 .side { display: grid; gap: 28px; min-width: 0; }
 
 /* Signals panel */
@@ -506,11 +507,12 @@ footer ul { margin: 0; padding-left: 18px; color: var(--ink-2); }
   function niceMax(v) { return v <= 4 ? 4 : v <= 6 ? 6 : v <= 8 ? 8 : Math.ceil(v / 5) * 5; }
 
   function trendPanel(T) {
+    if (!T || !T.length) return null;
     var section = el("section", { id: "trend", "aria-label": "Flag trend" });
     section.appendChild(el("div", { "class": "section-head" }, [el("h2", { text: "Flags over 14 days" }), el("span", { "class": "hint", text: "daily count" })]));
     var panel = el("div", { "class": "panel chart-panel" });
     section.appendChild(panel);
-    if (!T || T.length < 2) {
+    if (T.length < 2) {
       panel.appendChild(el("div", { "class": "hint", text: "Trend appears after two reports are stored." }));
       return section;
     }
@@ -575,9 +577,9 @@ footer ul { margin: 0; padding-left: 18px; color: var(--ink-2); }
   }
 
   function peoplePanel(P) {
+    if (!P || !P.length) return null;   // exec and PM dashboards carry no per-person strip
     var section = el("section", { id: "people", "aria-label": "Work in progress" });
     section.appendChild(el("div", { "class": "section-head" }, [el("h2", { text: "Work in progress" }), el("span", { "class": "hint", text: "open items per person, by team" })]));
-    if (!P || !P.length) return section;
     var teams = [];
     P.forEach(function (p) { if (teams.indexOf(p.team) < 0) teams.push(p.team); });
     var max = Math.max(1, Math.max.apply(null, P.map(function (p) { return p.wip; })));
@@ -599,14 +601,30 @@ footer ul { margin: 0; padding-left: 18px; color: var(--ink-2); }
     return section;
   }
 
+  // Sources actually read: every connector except those whose recipe coverage line says
+  // "<Connector> not connected" or "<Connector> not configured".
+  function sourcesRead(notes) {
+    var missing = {};
+    notes.forEach(function (n) {
+      var m = /^(Linear|GitHub|Slack) not (connected|configured)\b/.exec(n);
+      if (m) missing[m[1]] = true;
+    });
+    var read = ["Linear", "GitHub", "Slack"].filter(function (c) { return !missing[c]; });
+    if (read.length < 2) return read.join("");
+    return read.slice(0, -1).join(", ") + " and " + read[read.length - 1];
+  }
+
   function footer(D) {
     var notes = D.coverage_notes || [];
+    var fromFixtures = notes.indexOf("source: fixtures") >= 0;
+    var src = sourcesRead(notes);
     return el("footer", null, [
       notes.length ? el("div", null, [el("div", { "class": "eyebrow", text: "Coverage" }),
         el("ul", null, notes.map(function (n) { return el("li", { text: n }); }))])
-        : el("div", { text: "Coverage: all connectors read in full." }),
-      el("div", { text: "Generated " + fmtDate(D.generated_at, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) +
-        " by eng-pulse from Linear, GitHub and Slack. Items marked inferred come from indirect evidence." })
+        : el("div", { text: "Coverage: all connectors connected." }),
+      el("div", { "class": "sources", text: "Generated " + fmtDate(D.generated_at, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) +
+        " by eng-pulse from " + (src || "no connector") + (fromFixtures ? " (saved fixtures)" : "") +
+        ". Items marked inferred come from indirect evidence." })
     ]);
   }
 
@@ -625,10 +643,9 @@ footer ul { margin: 0; padding-left: 18px; color: var(--ink-2); }
       el("div", { "class": "section-head" }, [el("h2", { text: "Projects" }), el("span", { "class": "hint", text: "red first" })]),
       el("div", { "class": "projects" }, projects.map(function (p) { return projectCard(p, flagsById); }))
     ]));
-    app.appendChild(el("div", { "class": "lower" }, [
-      signalsPanel(D, projectOf),
-      el("div", { "class": "side" }, [trendPanel(D.trend), peoplePanel(D.people)])
-    ]));
+    var side = [trendPanel(D.trend), peoplePanel(D.people)].filter(Boolean);
+    app.appendChild(el("div", { "class": side.length ? "lower" : "lower solo" }, [signalsPanel(D, projectOf)]
+      .concat(side.length ? [el("div", { "class": "side" }, side)] : [])));
     app.appendChild(footer(D));
   }
 

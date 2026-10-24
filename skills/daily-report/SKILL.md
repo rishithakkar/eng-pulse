@@ -86,13 +86,14 @@ Read the format file for the audience in `references/formats/` and its example i
 
 An object valid against `schemas/dashboard.schema.json`, plus these rules the schema cannot express:
 
-- `people` is `[]` for the exec and PM audiences; only the lead audience gets per-person WIP. Omit `overloaded` flags unless the audience is lead.
+- **Audience on the dashboard** (this is the only place this rule is stated): the dashboard is an overview for every audience, so project cards and flags keep owner names and ping links even for exec; the exec brief's "no individuals" rule applies to the written brief only. For exec and PM, `people` is `[]` (no WIP strip) and `overloaded` flags are dropped; only lead gets per-person WIP and `overloaded`.
+- `generated_at` is the run time (fixture mode: `window.end`).
 - Every id in `projects[].flags` exists in `flags[]`.
 - `summary` counts equal the number of projects with each status.
 - Every `flags[].url` is an `https://` link to the flag's source. For `overloaded` (a person), use the team's Linear issues URL or the person's Linear profile URL.
 - A `null` owner is `{"name": "unowned", "slack_id": null}`.
 - `progress_pct` and `epics` are computed from the project's gathered issues, as in the PM view's Progress.
-- `trend` has at most 14 points, oldest first: one per earlier `reports/YYYY-MM-DD.json` (that date, and its count of red and of yellow `flags`), then today's. No earlier reports (always the case in fixture mode) → `[]`.
+- `trend` has at most 14 points, oldest first: the 13 most recent earlier `reports/YYYY-MM-DD.json` (each: that date, and its count of red and of yellow `flags`), then today's. No earlier reports (always the case in fixture mode) → `[]`.
 - `coverage_notes` holds exactly the lines the coverage line shows.
 
 ## 8. Save

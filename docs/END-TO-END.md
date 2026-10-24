@@ -28,7 +28,7 @@ Ask "Run the daily report. I'm the <role>; give me the <format> as <destination>
 
 | Step | Expected | Result | Date | Notes |
 |---|---|---|---|---|
-| exec × dashboard artifact | Artifact titled `<company> Pulse — <date>`. Under 250 words of brief in the reply. No person named. | | | |
+| exec × dashboard artifact | Artifact titled `<company> Pulse — <date>`. Under 250 words of brief in the reply, and the brief names no person. The dashboard keeps owner names and ping links on project cards and flags; `people` is empty (no WIP strip, no trend panel on a first run) and there are no `overloaded` flags. | | | |
 | exec × PDF | PDF, or the HTML with print → Save as PDF instructions. Print layout is clean. | | | |
 | exec × markdown | Brief in chat. Every project coloured. Every ask has a sourced date. | | | |
 | exec × Slack | Slack post format, draft shown, sent only after yes | | | |

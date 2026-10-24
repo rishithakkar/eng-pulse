@@ -195,3 +195,54 @@ def test_print_is_dark_ink_on_light_under_dark_theme_attribute(page):
     render(page, SAMPLE)
     page.evaluate("document.documentElement.dataset.theme = 'dark'")
     _assert_prints_dark_on_light(page)
+
+
+NO_SIDE = copy.deepcopy(SAMPLE)   # exec / PM dashboard on a first run: no WIP strip, no trend
+NO_SIDE["people"] = []
+NO_SIDE["trend"] = []
+
+
+def test_empty_people_hides_the_wip_section(page):
+    data = copy.deepcopy(SAMPLE)
+    data["people"] = []
+    render(page, data)
+    assert page.locator("#people").count() == 0
+    assert page.locator("#trend").is_visible()      # the other side panel still renders
+    assert page.console_errors == []
+
+
+def test_empty_trend_hides_the_trend_section(page):
+    data = copy.deepcopy(SAMPLE)
+    data["trend"] = []
+    render(page, data)
+    assert page.locator("#trend").count() == 0
+    assert page.locator("#people").is_visible()
+    assert page.console_errors == []
+
+
+def test_no_people_and_no_trend_leaves_no_blank_panel(page):
+    render(page, NO_SIDE)
+    assert page.locator("#people").count() == 0 and page.locator("#trend").count() == 0
+    assert page.locator(".side").count() == 0
+    # the flags panel takes the full width of the lower grid: no empty column beside it
+    lower = page.locator(".lower").bounding_box()
+    flags = page.locator('.lower > section[aria-label="Flags"]').bounding_box()
+    assert flags["width"] >= lower["width"] - 1
+    assert page.console_errors == []
+
+
+def test_footer_names_only_connectors_read(page):
+    data = copy.deepcopy(SAMPLE)
+    data["coverage_notes"] = [
+        "GitHub not connected — stuck_pr, stale_pr, contested_pr, board_mismatch and the "
+        "linked-PR activity check of idle_issue omitted", "source: fixtures"]
+    render(page, data)
+    src = page.locator("footer .sources").inner_text()
+    assert "from Linear and Slack (saved fixtures)." in src and "GitHub" not in src
+
+
+def test_footer_says_all_connectors_connected_without_notes(page):
+    render(page, ALL_GREEN)
+    foot = page.locator("footer").inner_text()
+    assert "Coverage: all connectors connected." in foot
+    assert "from Linear, GitHub and Slack." in page.locator("footer .sources").inner_text()
