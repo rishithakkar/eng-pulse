@@ -597,3 +597,21 @@ def test_blocker_state_is_read_and_a_done_blocker_never_flags():
     exp = json.loads(read("tests/fixtures/blocked/expected.json"))
     assert "GRO-208" in {n["subject"] for n in exp["near_miss"]}
     assert "GRO-208" not in {f["subject"] for f in exp["flags"]}
+
+
+def test_report_preferences_slack_needs_no_audience_and_keys_match_people():
+    schema = json.loads(read("schemas/team-map.schema.json"))
+    base = load_yaml(repo_root() / "team-map.example.yaml")
+    people_pattern = next(iter(schema["properties"]["people"]["patternProperties"]))
+    assert next(iter(schema["properties"]["report_preferences"]["patternProperties"])) == people_pattern
+
+    def valid(prefs):
+        try:
+            jsonschema.validate({**base, "report_preferences": prefs}, schema)
+            return True
+        except jsonschema.ValidationError:
+            return False
+    assert valid({"U0123ABC": {"destination": "slack"}})
+    assert valid({"priya.s": {"audience": "pm", "destination": "markdown"}})
+    assert not valid({"U0123ABC": {"destination": "pdf"}})          # non-slack needs audience
+    assert not valid({"U0123ABC": {"audience": "ceo", "destination": "slack"}})

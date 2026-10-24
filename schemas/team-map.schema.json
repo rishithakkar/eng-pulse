@@ -193,7 +193,7 @@
     "report_preferences": {
       "type": "object",
       "patternProperties": {
-        "^[A-Za-z0-9]+$": {
+        "^[A-Za-z0-9_.-]+$": {
           "type": "object",
           "properties": {
             "audience": {
@@ -213,10 +213,24 @@
             }
           },
           "required": [
-            "audience",
             "destination"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "if": {
+            "properties": {
+              "destination": {
+                "not": {
+                  "const": "slack"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "audience"
+            ]
+          },
+          "description": "audience is optional when destination is slack (slack always renders slack-post.md)"
         }
       },
       "additionalProperties": false

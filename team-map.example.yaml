@@ -74,3 +74,4 @@ people:
     github: lena-m          # no Linear or Slack identity mapped yet
 report_preferences:                      # remembered per asker, written by daily-report
   U0999CEO: { audience: exec, destination: artifact }
+  U0123ABC: { destination: slack }        # slack needs no audience: it always renders slack-post.md
