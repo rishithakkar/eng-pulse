@@ -1,0 +1,9 @@
+# Private planning docs (specs, plans) stay local
+docs/superpowers/
+
+# Company-specific config never belongs in the repo
+team-map.yaml
+
+# OS / editor
+.DS_Store
+Thumbs.db
