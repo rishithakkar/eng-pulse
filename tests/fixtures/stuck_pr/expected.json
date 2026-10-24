@@ -1,0 +1,20 @@
+{
+  "flags": [
+    {
+      "signal": "stuck_pr",
+      "subject": "https://github.com/acme/payments-api/pull/12",
+      "owner": "arjun",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "yellow",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "https://github.com/acme/mobile-app/pull/7",
+      "reason": "open, non-draft, no review yet, but created 23h before window.end: one hour inside thresholds.review_wait_hours"
+    }
+  ]
+}

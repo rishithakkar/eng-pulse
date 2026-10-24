@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: exec-brief-from-fixture
+expected_outcome: |
+  Fixture board_mismatch. The run uses fixture mode with no connector calls and renders the
+  exec brief as markdown in the conversation. Both projects (Payments v2, Mobile Onboarding) are
+  yellow from board_mismatch flags only (PLT-106 merged-not-done; GRO-205 inferred), so the brief
+  counts them on the project lines, labels the Mobile Onboarding one inferred, gives a single
+  "No action needed from you" ask with a sourced date (Wed 28 Oct), names no person, stays under
+  250 words and ends with a coverage line including source: fixtures.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,20 @@
+{
+  "flags": [
+    {
+      "signal": "forecast_risk",
+      "subject": "Platform / Cycle 42",
+      "owner": "priya",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "red",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "Growth / Cycle 17",
+      "reason": "1 unstarted, 2 working days left (27, 28 Oct), run-rate 3 done / 6 elapsed working days = 0.5 per day: 1 is not more than 2 x 0.5"
+    }
+  ]
+}

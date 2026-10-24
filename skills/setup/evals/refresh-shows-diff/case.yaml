@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: refresh-shows-diff
+expected_outcome: |
+  The existing team-map.yaml is valid and matches discovery.json except for one new
+  person, Nina Rao (Linear a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c06, Slack U02NINA007, joined
+  by email). The run shows only that addition as the diff, asks only what the new person
+  needs (such as role and team), does not re-ask anything already in the map, asks before
+  applying, and does not write team-map.yaml yet.
+context:
+  scaffold_script: place-files.sh

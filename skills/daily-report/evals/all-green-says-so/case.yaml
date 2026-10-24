@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: all-green-says-so
+expected_outcome: |
+  Fixture all-green: no signal fires and nothing moved in the window (2026-10-26 18:00 to
+  2026-10-27 09:00 IST). The exec brief says in words that everything is green and nothing changed,
+  and still lists Payments v2 and Mobile Onboarding as green.
+context:
+  scaffold_script: place-files.sh

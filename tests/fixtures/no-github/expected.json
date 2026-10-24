@@ -1,0 +1,21 @@
+{
+  "flags": [
+    {
+      "signal": "idle_issue",
+      "subject": "PLT-118",
+      "owner": "priya",
+      "inferred": false
+    },
+    {
+      "signal": "blocked",
+      "subject": "https://acme.slack.com/archives/C0ONBOARD/p1761538000000500",
+      "owner": "arjun",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "yellow",
+    "Mobile Onboarding": "red"
+  },
+  "near_miss": []
+}

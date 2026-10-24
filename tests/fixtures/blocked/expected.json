@@ -1,0 +1,24 @@
+{
+  "flags": [
+    {
+      "signal": "blocked",
+      "subject": "PLT-108",
+      "owner": "arjun",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "red",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "GRO-208",
+      "reason": "blocked_by points to GRO-209, which is Done"
+    },
+    {
+      "subject": "https://acme.slack.com/archives/C0ONBOARD/p1761543000000300",
+      "reason": "unanswered blocker thread started 3h before window.end: one hour inside thresholds.blocker_unanswered_hours"
+    }
+  ]
+}

@@ -1,0 +1,458 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/eng-pulse/model.schema.json",
+  "title": "eng-pulse Gathered model",
+  "$defs": {
+    "Issue": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "team_id": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "state_type": {
+          "enum": [
+            "backlog",
+            "unstarted",
+            "started",
+            "completed",
+            "canceled"
+          ]
+        },
+        "assignee_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "estimate": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "parent_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "milestone_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_activity_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "branch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "linked_pr_urls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blocked_by": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "identifier",
+        "title",
+        "url",
+        "project_id",
+        "team_id",
+        "state",
+        "state_type",
+        "assignee_id",
+        "priority",
+        "estimate",
+        "parent_id",
+        "milestone_id",
+        "created_at",
+        "updated_at",
+        "last_activity_at",
+        "branch",
+        "linked_pr_urls",
+        "blocked_by"
+      ],
+      "additionalProperties": false
+    },
+    "PullRequest": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "number": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "author_login": {
+          "type": "string"
+        },
+        "draft": {
+          "type": "boolean"
+        },
+        "state": {
+          "enum": [
+            "open",
+            "merged",
+            "closed"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_commit_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_comment_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "review_state": {
+          "enum": [
+            "none",
+            "required",
+            "approved",
+            "changes_requested"
+          ]
+        },
+        "changes_requested_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "review_comment_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "requested_reviewer_logins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "checks": {
+          "enum": [
+            "passing",
+            "failing",
+            "pending",
+            "none"
+          ]
+        },
+        "merged_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "linked_issue_identifiers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "url",
+        "repo",
+        "number",
+        "title",
+        "author_login",
+        "draft",
+        "state",
+        "created_at",
+        "updated_at",
+        "last_commit_at",
+        "last_comment_at",
+        "review_state",
+        "changes_requested_count",
+        "review_comment_count",
+        "requested_reviewer_logins",
+        "checks",
+        "merged_at",
+        "linked_issue_identifiers"
+      ],
+      "additionalProperties": false
+    },
+    "Thread": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_reply_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reply_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "author_slack_id": {
+          "type": "string"
+        },
+        "mentioned_slack_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "text_excerpt": {
+          "type": "string"
+        },
+        "is_blocker_candidate": {
+          "type": "boolean"
+        },
+        "answered": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "channel",
+        "url",
+        "started_at",
+        "last_reply_at",
+        "reply_count",
+        "author_slack_id",
+        "mentioned_slack_ids",
+        "text_excerpt",
+        "is_blocker_candidate",
+        "answered"
+      ],
+      "additionalProperties": false
+    },
+    "ProjectUpdate": {
+      "type": "object",
+      "properties": {
+        "project_id": {
+          "type": "string"
+        },
+        "health": {
+          "enum": [
+            "onTrack",
+            "atRisk",
+            "offTrack"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "url": {
+          "type": "string"
+        },
+        "author_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "project_id",
+        "health",
+        "created_at",
+        "url",
+        "author_id"
+      ],
+      "additionalProperties": false
+    },
+    "Cycle": {
+      "type": "object",
+      "properties": {
+        "team_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "starts_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ends_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "issue_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "completed_issue_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "team_id",
+        "name",
+        "starts_at",
+        "ends_at",
+        "issue_ids",
+        "completed_issue_ids"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "window": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "timezone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "timezone"
+      ],
+      "additionalProperties": false
+    },
+    "connected": {
+      "type": "object",
+      "properties": {
+        "linear": {
+          "type": "boolean"
+        },
+        "github": {
+          "type": "boolean"
+        },
+        "slack": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "linear",
+        "github",
+        "slack"
+      ],
+      "additionalProperties": false
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Issue"
+      }
+    },
+    "prs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PullRequest"
+      }
+    },
+    "threads": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Thread"
+      }
+    },
+    "project_updates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ProjectUpdate"
+      }
+    },
+    "cycles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Cycle"
+      }
+    },
+    "coverage_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "window",
+    "connected",
+    "issues",
+    "prs",
+    "threads",
+    "project_updates",
+    "cycles",
+    "coverage_notes"
+  ],
+  "additionalProperties": false
+}

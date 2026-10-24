@@ -1,0 +1,20 @@
+{
+  "flags": [
+    {
+      "signal": "health",
+      "subject": "Payments v2",
+      "owner": "priya",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "red",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "Mobile Onboarding",
+      "reason": "latest update is onTrack and was posted 164h (6 days 20h) before window.end: inside thresholds.health_stale_days"
+    }
+  ]
+}

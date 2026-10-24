@@ -1,0 +1,13 @@
+{
+  "_note": "verify Linear names with one tools/list call; see spec §14. These are the only connector tool names the gather recipes may mention.",
+  "linear": ["list_issues", "get_issue", "list_projects", "get_project", "list_teams",
+             "get_team", "list_users", "get_user", "list_cycles", "list_milestones",
+             "list_comments", "get_status_updates", "list_issue_statuses",
+             "list_issue_labels"],
+  "github": ["search_pull_requests", "list_pull_requests", "pull_request_read",
+             "list_commits", "search_issues"],
+  "slack": ["slack_search_public_and_private", "slack_search_public", "slack_read_channel",
+            "slack_read_thread", "slack_search_channels", "slack_search_users",
+            "slack_read_user_profile", "slack_get_reactions", "slack_send_message", "slack_send_message_draft",
+            "slack_create_canvas", "slack_update_canvas"]
+}

@@ -1,0 +1,30 @@
+{
+  "flags": [
+    {
+      "signal": "board_mismatch",
+      "subject": "PLT-106",
+      "owner": "priya",
+      "inferred": false
+    },
+    {
+      "signal": "board_mismatch",
+      "subject": "GRO-205",
+      "owner": "lena",
+      "inferred": true
+    }
+  ],
+  "project_status": {
+    "Payments v2": "yellow",
+    "Mobile Onboarding": "yellow"
+  },
+  "near_miss": [
+    {
+      "subject": "PLT-107",
+      "reason": "its merged PR's issue is Done: board and code agree"
+    },
+    {
+      "subject": "GRO-206",
+      "reason": "Todo with a branch name but no linked PR: a branch name alone is not evidence of commits"
+    }
+  ]
+}

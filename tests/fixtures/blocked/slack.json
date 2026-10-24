@@ -1,0 +1,19 @@
+{
+  "connected": true,
+  "threads": [
+    {
+      "channel": "#proj-onboarding",
+      "url": "https://acme.slack.com/archives/C0ONBOARD/p1761543000000300",
+      "started_at": "2026-10-27T06:00:00+05:30",
+      "last_reply_at": "2026-10-27T06:00:00+05:30",
+      "reply_count": 0,
+      "author_slack_id": "U0123ABG",
+      "mentioned_slack_ids": [
+        "U0123ABD"
+      ],
+      "text_excerpt": "Blocked: the App Store review account is locked, can someone with admin reset it?",
+      "is_blocker_candidate": true,
+      "answered": false
+    }
+  ]
+}

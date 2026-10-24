@@ -1,0 +1,143 @@
+{
+  "linear": {
+    "teams": [
+      {
+        "id": "0b6f3c1e-2a4d-4c8e-9f10-3d5e7a9b1c21",
+        "name": "Core Platform",
+        "key": "CORE"
+      },
+      {
+        "id": "1c7a4d2f-3b5e-4d9f-8a21-4e6f8b0c2d32",
+        "name": "Mobile",
+        "key": "MOB"
+      }
+    ],
+    "projects": [
+      {
+        "id": "7c1e9a54-0d3b-4f6a-b2c8-5e9d1f3a7b40",
+        "name": "Billing Revamp",
+        "teams": [
+          "0b6f3c1e-2a4d-4c8e-9f10-3d5e7a9b1c21"
+        ]
+      },
+      {
+        "id": "8d2fab65-1e4c-4a7b-93d9-6fae2a4b8c51",
+        "name": "iOS Checkout",
+        "teams": [
+          "1c7a4d2f-3b5e-4d9f-8a21-4e6f8b0c2d32"
+        ]
+      },
+      {
+        "id": "9e30bc76-2f5d-4b8c-a4ea-70bf3b5c9d62",
+        "name": "Search Relevance",
+        "teams": [
+          "0b6f3c1e-2a4d-4c8e-9f10-3d5e7a9b1c21"
+        ]
+      }
+    ],
+    "users": [
+      {
+        "id": "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c01",
+        "name": "Asha Verma",
+        "email": "asha@northwind.example"
+      },
+      {
+        "id": "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c02",
+        "name": "Rohan Mehta",
+        "email": "rohan@northwind.example"
+      },
+      {
+        "id": "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c03",
+        "name": "Li Wei",
+        "email": "li.wei@northwind.example"
+      },
+      {
+        "id": "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c04",
+        "name": "Carlos Diaz",
+        "email": "carlos@northwind.example"
+      },
+      {
+        "id": "a1f0c2d3-4e5f-4a6b-8c7d-9e0f1a2b3c05",
+        "name": "Fatima Khan",
+        "email": "fatima@northwind.example"
+      }
+    ]
+  },
+  "github": {
+    "repos": [
+      {
+        "full_name": "northwind/billing-api"
+      },
+      {
+        "full_name": "northwind/billing-web"
+      },
+      {
+        "full_name": "northwind/ios-app"
+      },
+      {
+        "full_name": "northwind/search-service"
+      }
+    ]
+  },
+  "slack": {
+    "channels": [
+      {
+        "id": "C01BILL001",
+        "name": "proj-billing"
+      },
+      {
+        "id": "C01IOS0002",
+        "name": "ios-checkout"
+      },
+      {
+        "id": "C01SRCH003",
+        "name": "search-relevance"
+      },
+      {
+        "id": "C01GEN0004",
+        "name": "general"
+      },
+      {
+        "id": "C01RND0005",
+        "name": "random"
+      }
+    ],
+    "users": [
+      {
+        "id": "U02ASHA001",
+        "real_name": "Asha Verma",
+        "profile": {
+          "email": "asha@northwind.example"
+        }
+      },
+      {
+        "id": "U02ROHN002",
+        "real_name": "Rohan Mehta",
+        "profile": {
+          "email": "rohan@northwind.example"
+        }
+      },
+      {
+        "id": "U02LIWE003",
+        "real_name": "Li Wei",
+        "profile": {
+          "email": "wei.li@northwind-old.example"
+        }
+      },
+      {
+        "id": "U02CARL004",
+        "real_name": "Carlos D.",
+        "profile": {
+          "email": "carlos@northwind.example"
+        }
+      },
+      {
+        "id": "U02JORD005",
+        "real_name": "Jordan Lee",
+        "profile": {
+          "email": "jordan@northwind.example"
+        }
+      }
+    ]
+  }
+}

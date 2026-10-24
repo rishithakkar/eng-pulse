@@ -1,0 +1,20 @@
+{
+  "flags": [
+    {
+      "signal": "stale_pr",
+      "subject": "https://github.com/acme/payments-api/pull/21",
+      "owner": "priya",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "yellow",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "https://github.com/acme/mobile-app/pull/8",
+      "reason": "open, last comment 47h before window.end (last commit 49h): newest activity is one hour inside thresholds.stale_pr_hours"
+    }
+  ]
+}

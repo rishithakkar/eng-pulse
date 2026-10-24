@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: artifact-from-fixture
+expected_outcome: |
+  Fixture board_mismatch, audience pm, destination artifact. The run uses fixture mode with no
+  connector calls, builds PULSE_DATA and fills templates/dashboard.html with it (published as an
+  artifact, or saved and handed over as an HTML file when no Artifact tool is available), and gives
+  the PM view text in the reply. PULSE_DATA validates against schemas/dashboard.schema.json;
+  people is [] and trend is [] (PM audience, fixture mode); summary is 0 red, 2 yellow, 0 green,
+  matching the two yellow projects; flags holds the two board_mismatch flags (PLT-106 owner Priya S;
+  GRO-205 owner Lena M, inferred: true) and every projects[].flags id exists in flags[];
+  generated_at is window.end; coverage_notes includes source: fixtures. No reports/ files are saved.
+context:
+  scaffold_script: place-files.sh

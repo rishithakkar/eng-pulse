@@ -1,0 +1,24 @@
+{
+  "flags": [
+    {
+      "signal": "idle_issue",
+      "subject": "PLT-104",
+      "owner": "priya",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "yellow",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "PLT-105",
+      "reason": "In Progress with last activity 71h before window.end: one hour inside thresholds.idle_issue_days"
+    },
+    {
+      "subject": "GRO-204",
+      "reason": "no Linear activity for five days, but its linked PR had a commit 20h ago; GitHub activity counts"
+    }
+  ]
+}

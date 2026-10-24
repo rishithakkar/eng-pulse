@@ -1,0 +1,21 @@
+{
+  "flags": [
+    {
+      "signal": "stuck_pr",
+      "subject": "https://github.com/acme/payments-api/pull/50",
+      "owner": "arjun",
+      "inferred": false
+    },
+    {
+      "signal": "blocked",
+      "subject": "https://acme.slack.com/archives/C0ONBOARD/p1761541000000400",
+      "owner": "sam",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "yellow",
+    "Mobile Onboarding": "red"
+  },
+  "near_miss": []
+}

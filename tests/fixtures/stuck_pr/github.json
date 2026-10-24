@@ -1,0 +1,53 @@
+{
+  "connected": true,
+  "prs": [
+    {
+      "url": "https://github.com/acme/payments-api/pull/12",
+      "repo": "acme/payments-api",
+      "number": 12,
+      "title": "PLT-101 Add idempotency keys to refund endpoint",
+      "author_login": "priya-s",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-26T03:00:00+05:30",
+      "updated_at": "2026-10-26T04:00:00+05:30",
+      "last_commit_at": "2026-10-26T03:00:00+05:30",
+      "last_comment_at": "2026-10-26T04:00:00+05:30",
+      "review_state": "required",
+      "changes_requested_count": 0,
+      "review_comment_count": 0,
+      "requested_reviewer_logins": [
+        "arjun-k"
+      ],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "PLT-101"
+      ]
+    },
+    {
+      "url": "https://github.com/acme/mobile-app/pull/7",
+      "repo": "acme/mobile-app",
+      "number": 7,
+      "title": "GRO-201 OTP resend countdown",
+      "author_login": "lena-m",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-26T10:00:00+05:30",
+      "updated_at": "2026-10-26T10:00:00+05:30",
+      "last_commit_at": "2026-10-26T10:00:00+05:30",
+      "last_comment_at": "2026-10-26T10:00:00+05:30",
+      "review_state": "required",
+      "changes_requested_count": 0,
+      "review_comment_count": 0,
+      "requested_reviewer_logins": [
+        "sam-r"
+      ],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "GRO-201"
+      ]
+    }
+  ]
+}

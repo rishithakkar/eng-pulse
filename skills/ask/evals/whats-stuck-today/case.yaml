@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: whats-stuck-today
+expected_outcome: |
+  Fixture board_mismatch. Nothing is red or blocked. Two yellow flags across the mapped projects:
+  PLT-106 board_mismatch (Payments v2, owner Priya S <@U0123ABC>, move it to the state its code is in)
+  and GRO-205 board_mismatch inferred (Mobile Onboarding, owner Lena M, plain name). PLT-107, GRO-206,
+  PR mobile-app#11 (inside the review wait) and PR payments-api#43 are not stuck.
+context:
+  scaffold_script: place-files.sh

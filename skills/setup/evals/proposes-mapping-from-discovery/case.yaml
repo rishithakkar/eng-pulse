@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: proposes-mapping-from-discovery
+expected_outcome: |
+  The run reads discovery.json instead of calling Linear, GitHub or Slack. It proposes a
+  mapping: projects with their exact Linear UUIDs (for example Billing Revamp
+  7c1e9a54-0d3b-4f6a-b2c8-5e9d1f3a7b40), suggested channels and repos; teams with lead and
+  manager left to ask; people joined across Linear and Slack by email first (Carlos Diaz
+  in Linear = Slack U02CARL004 "Carlos D." via the shared email) and by name second (Li
+  Wei, whose emails differ), every join labelled a guess. It then asks the user to
+  confirm, starting with the projects, and writes no team-map.yaml yet.
+context:
+  scaffold_script: place-files.sh

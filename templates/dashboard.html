@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Engineering Pulse</title>
+<!--
+  eng-pulse dashboard template.
+  Claude replaces ONLY the contents of the JSON script block with id pulse-data with a
+  PULSE_DATA object that validates against schemas/dashboard.schema.json. Everything else is fixed.
+  No libraries, no network: inline CSS, inline SVG drawn by the script at the bottom.
+-->
+<style>
+/* Layout: summary strip on top, project cards, then flags beside a quiet column of trend + people. */
+:root {
+  color-scheme: light;
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --surface-2: #f8f9fa;
+  --ink: #12151a;
+  --ink-2: #4b5260;
+  --muted: #767d8a;
+  --line: #e2e5ea;
+  --line-strong: #c9ced6;
+  --accent: #2a78d6;
+  --accent-track: #dde9f8;
+  --link: #1d5fb0;
+  --red: #d03b3b;
+  --yellow: #fab219;
+  --green: #0ca30c;
+  --red-tint: #fbeaea;
+  --yellow-tint: #fef3d9;
+  --green-tint: #e6f4e6;
+  --shadow: 0 1px 2px rgba(18, 21, 26, 0.06);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0e1013;
+    --surface: #171a1f;
+    --surface-2: #1d2127;
+    --ink: #eef0f3;
+    --ink-2: #b8bec8;
+    --muted: #8a919c;
+    --line: #2a2f37;
+    --line-strong: #3a404a;
+    --accent: #3987e5;
+    --accent-track: #1f2f45;
+    --link: #7fb2ef;
+    --red-tint: #3a1d1e;
+    --yellow-tint: #3a2f14;
+    --green-tint: #15301a;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e1013;
+  --surface: #171a1f;
+  --surface-2: #1d2127;
+  --ink: #eef0f3;
+  --ink-2: #b8bec8;
+  --muted: #8a919c;
+  --line: #2a2f37;
+  --line-strong: #3a404a;
+  --accent: #3987e5;
+  --accent-track: #1f2f45;
+  --link: #7fb2ef;
+  --red-tint: #3a1d1e;
+  --yellow-tint: #3a2f14;
+  --green-tint: #15301a;
+  --shadow: none;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 var(--font);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 40px;
+}
+a { color: var(--link); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+.wrap { max-width: 1200px; margin: 0 auto; display: grid; gap: 28px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.section-head h2 { font-size: 17px; font-weight: 650; }
+.section-head .hint { font-size: 13px; color: var(--muted); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
+
+/* Status glyphs: shape carries the state as well as colour. */
+.glyph { width: 16px; height: 16px; flex: none; display: inline-block; vertical-align: -3px; }
+.glyph[data-s="red"] { fill: var(--red); }
+.glyph[data-s="yellow"] { fill: var(--yellow); }
+.glyph[data-s="green"] { fill: var(--green); }
+.glyph { --knock: #ffffff; }
+.glyph[data-s="yellow"] { --knock: #12151a; }
+
+/* Header strip */
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px; }
+.title-block { min-width: 0; display: grid; gap: 4px; }
+.title-block h1 { font-size: clamp(26px, 4vw, 34px); font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+.title-block .when { font-size: 14px; color: var(--ink-2); }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; min-width: min(100%, 420px); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.stat[data-status="red"] { background: var(--red-tint); }
+.stat[data-status="yellow"] { background: var(--yellow-tint); }
+.stat[data-status="green"] { background: var(--green-tint); }
+.stat-label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.stat-value { font-size: 32px; font-weight: 700; line-height: 1.1; }
+.stat-sub { font-size: 12px; color: var(--muted); }
+
+/* Projects */
+.projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 14px; }
+.project-card { padding: 16px 18px 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.project-card .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.project-card h3 { font-size: 17px; font-weight: 650; line-height: 1.3; min-width: 0; overflow-wrap: anywhere; }
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 2px 6px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.pill[data-s="red"] { background: var(--red-tint); }
+.pill[data-s="yellow"] { background: var(--yellow-tint); }
+.pill[data-s="green"] { background: var(--green-tint); }
+.owner { min-height: 22px; font-size: 13px; color: var(--ink-2); display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.owner b { color: var(--ink); font-weight: 600; }
+a.ping { font-size: 12px; font-weight: 600; text-decoration: none; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--link); white-space: nowrap; }
+a.ping:hover { background: var(--surface-2); }
+.progress { display: grid; gap: 6px; }
+.progress-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); }
+.progress-row strong { color: var(--ink); font-weight: 650; }
+.bar { height: 8px; border-radius: 4px; background: var(--accent-track); overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); border-radius: 0 4px 4px 0; }
+.epics { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; font-size: 13px; color: var(--ink-2); }
+.epics li { display: flex; justify-content: space-between; gap: 12px; }
+.epics li span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.epics .n { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 10px; border-top: 1px solid var(--line); }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 5px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); font: 12px/1.6 var(--mono); color: var(--ink); text-decoration: none; }
+.chip .glyph { width: 13px; height: 13px; vertical-align: -2px; }
+.chip:hover { border-color: var(--line-strong); }
+.chips .none { font-size: 13px; color: var(--muted); }
+
+/* Lower grid */
+.lower { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.lower.solo { grid-template-columns: minmax(0, 1fr); }
+.side { display: grid; gap: 28px; min-width: 0; }
+
+/* Signals panel */
+.flags { list-style: none; margin: 0; padding: 0; }
+.flag { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; padding: 14px 18px; border-top: 1px solid var(--line); }
+.flag:first-child { border-top: 0; }
+.flag:target { background: var(--surface-2); }
+.flag > .glyph { grid-row: 1 / span 3; margin-top: 3px; width: 18px; height: 18px; }
+.flag .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 12px; color: var(--muted); }
+.flag .sev { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
+.flag .sig { font-family: var(--mono); color: var(--ink-2); }
+.flag .title { font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+.flag .title a { color: var(--ink); text-decoration-color: var(--line-strong); }
+.flag .title a:hover { color: var(--link); }
+.flag .next { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+.flag .foot { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+.flag .foot b { color: var(--ink); font-weight: 600; }
+.inferred { font-size: 11px; font-weight: 600; font-style: italic; padding: 0 7px; border-radius: 999px; border: 1px dashed var(--line-strong); color: var(--ink-2); }
+.flags-empty { padding: 28px 22px; display: flex; gap: 12px; align-items: flex-start; }
+.flags-empty .glyph { width: 22px; height: 22px; margin-top: 1px; }
+.flags-empty strong { display: block; font-size: 16px; }
+.flags-empty span { color: var(--ink-2); font-size: 14px; }
+
+/* Trend */
+.chart-panel { padding: 14px 16px 10px; }
+.legend { display: flex; gap: 14px; font-size: 12px; color: var(--ink-2); margin-bottom: 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+.trend-wrap { position: relative; }
+#trend svg { display: block; width: 100%; height: auto; overflow: visible; }
+.axis-text { font: 11px var(--font); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.end-label { font: 600 11px var(--font); fill: var(--ink-2); }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px; padding: 6px 9px; font-size: 12px; color: var(--ink); box-shadow: 0 4px 14px rgba(0,0,0,0.12); white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); }
+.tip .d { color: var(--muted); }
+
+/* People strip: small multiples on one shared scale, team-grouped, alphabetical. */
+.people { padding: 14px 16px 16px; display: grid; gap: 14px; }
+.team { display: grid; gap: 6px; }
+.team h3 { font-size: 12px; font-weight: 650; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.person { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); align-items: center; gap: 10px; font-size: 13px; }
+.person .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
+.person .track { display: flex; align-items: center; gap: 6px; }
+.person .w { height: 10px; border-radius: 0 4px 4px 0; background: var(--accent); min-width: 2px; }
+.person .v { font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* Footer */
+footer { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+footer ul { margin: 0; padding-left: 18px; color: var(--ink-2); }
+.error { padding: 18px; color: var(--ink); }
+
+@media (max-width: 900px) {
+  .lower { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  body { padding-block: 18px 28px; font-size: 14px; }
+  .stats { min-width: 0; width: 100%; gap: 8px; }
+  .stat { padding: 10px; }
+  .stat-value { font-size: 26px; }
+  .flag { padding: 12px 14px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar > span { transition: width 400ms ease-out; }
+}
+
+/* PDF export path: one column, light tints only, no trend or people strip. */
+@media print {
+  /* Match the dark rules' specificity so a dark-mode viewer still prints dark ink on white. */
+  :root, :root:not([data-theme="light"]), :root[data-theme="dark"] { color-scheme: light; --bg: #ffffff; --surface: #ffffff; --surface-2: #ffffff; --ink: #000000; --ink-2: #333333; --muted: #555555; --line: #cccccc; --line-strong: #999999; --link: #000000; --accent: #555555; --accent-track: #e6e6e6; --red-tint: #fbeaea; --yellow-tint: #fef3d9; --green-tint: #e6f4e6; --shadow: none; }
+  body { padding: 0; font-size: 11pt; }
+  #trend, #people, .side { display: none !important; }
+  .wrap, .lower, .projects { display: block; }
+  .project-card, .flag, .stat { break-inside: avoid; }
+  .project-card { margin-bottom: 10px; }
+  .panel { box-shadow: none; }
+  .stats { max-width: 420px; }
+  a.ping { border: 0; padding: 0; }
+  .wrap > * + * { margin-top: 18px; }
+  .section-head { margin-bottom: 8px; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="g-red" viewBox="0 0 16 16"><path d="M5 1h6l4 4v6l-4 4H5l-4-4V5z"/><rect fill="var(--knock)" x="7" y="3.8" width="2" height="5.4" rx="1"/><circle fill="var(--knock)" cx="8" cy="11.6" r="1.1"/></symbol>
+  <symbol id="g-yellow" viewBox="0 0 16 16"><path d="M8 1.2 15.2 14H.8z"/><rect fill="var(--knock)" x="7.1" y="5.4" width="1.8" height="4.6" rx=".9"/><circle fill="var(--knock)" cx="8" cy="11.9" r="1"/></symbol>
+  <symbol id="g-green" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/><path fill="var(--knock)" d="M4.6 8.3 7 10.6l4.5-4.9-1.1-1-3.4 3.8-1.3-1.3z"/></symbol>
+</svg>
+
+<div class="wrap" id="app" aria-live="polite"></div>
+
+<script id="pulse-data" type="application/json">
+{
+  "generated_at": "2026-10-27T07:00:00Z",
+  "company": "Acme",
+  "window": {"start": "2026-10-26T18:00:00Z", "end": "2026-10-27T07:00:00Z"},
+  "summary": {"red": 1, "yellow": 1, "green": 1},
+  "projects": [
+    {
+      "name": "Mobile Onboarding",
+      "status": "yellow",
+      "owner": {"name": "Daniel O", "slack_id": "U0456GRA"},
+      "progress_pct": 38,
+      "epics": [
+        {"name": "Passwordless sign-in", "done": 1, "total": 3},
+        {"name": "Welcome tour", "done": 2, "total": 5}
+      ],
+      "flags": ["f3", "f4", "f5"]
+    },
+    {
+      "name": "Search Revamp",
+      "status": "green",
+      "owner": {"name": "Ramesh K", "slack_id": null},
+      "progress_pct": 81,
+      "epics": [
+        {"name": "Typo-tolerant queries", "done": 4, "total": 4},
+        {"name": "Ranking v2", "done": 5, "total": 7}
+      ],
+      "flags": []
+    },
+    {
+      "name": "Payments v2",
+      "status": "red",
+      "owner": {"name": "Priya S", "slack_id": "U0123ABC"},
+      "progress_pct": 54,
+      "epics": [
+        {"name": "Card tokenisation", "done": 6, "total": 8},
+        {"name": "Refunds", "done": 1, "total": 6}
+      ],
+      "flags": ["f1", "f2", "f6"]
+    }
+  ],
+  "flags": [
+    {
+      "id": "f1",
+      "signal": "blocked",
+      "severity": "red",
+      "title": "PLT-112 Refund webhooks: blocked on ledger API access",
+      "url": "https://linear.app/acme/issue/PLT-112/refund-webhooks",
+      "owner": {"name": "Priya S", "slack_id": "U0123ABC"},
+      "next_action": "Priya S: unblock PLT-112 Refund webhooks, blocked for 3 days",
+      "inferred": false
+    },
+    {
+      "id": "f3",
+      "signal": "stuck_pr",
+      "severity": "yellow",
+      "title": "PR #11 GRO-205 OTP entry screen: no first review",
+      "url": "https://github.com/acme/mobile-app/pull/11",
+      "owner": {"name": "Aisha N", "slack_id": "U0456GRB"},
+      "next_action": "Aisha N: review PR #11 GRO-205 OTP entry screen, waiting 31h for a first review",
+      "inferred": false
+    },
+    {
+      "id": "f2",
+      "signal": "health",
+      "severity": "red",
+      "title": "Payments v2: latest project update says off track",
+      "url": "https://linear.app/acme/project/payments-v2/updates#update-7",
+      "owner": {"name": "Priya S", "slack_id": "U0123ABC"},
+      "next_action": "Priya S: post a project update for Payments v2 with a recovery plan",
+      "inferred": false
+    },
+    {
+      "id": "f4",
+      "signal": "board_mismatch",
+      "severity": "yellow",
+      "title": "GRO-206 Biometric unlock prompt: PR open, issue still Todo",
+      "url": "https://linear.app/acme/issue/GRO-206/biometric-unlock-prompt",
+      "owner": {"name": "Daniel O", "slack_id": "U0456GRA"},
+      "next_action": "Daniel O: move GRO-206 to the state its code is in",
+      "inferred": true
+    },
+    {
+      "id": "f5",
+      "signal": "stale_pr",
+      "severity": "yellow",
+      "title": "PR #9 Welcome tour carousel: untouched since last week",
+      "url": "https://github.com/acme/mobile-app/pull/9",
+      "owner": {"name": "Ramesh K", "slack_id": null},
+      "next_action": "Ramesh K: push, merge or close PR #9 Welcome tour carousel, untouched for 6 days",
+      "inferred": false
+    },
+    {
+      "id": "f6",
+      "signal": "idle_issue",
+      "severity": "yellow",
+      "title": "PLT-118 Partial refunds UI: In Progress with no activity",
+      "url": "https://linear.app/acme/issue/PLT-118/partial-refunds-ui",
+      "owner": {"name": "Mei C", "slack_id": "U0123ABF"},
+      "next_action": "Mei C: update PLT-118 or move it out of In Progress, no activity for 5 days",
+      "inferred": false
+    }
+  ],
+  "people": [
+    {"name": "Tom W", "slack_id": "U0123ABE", "team": "Platform", "wip": 2},
+    {"name": "Priya S", "slack_id": "U0123ABC", "team": "Platform", "wip": 3},
+    {"name": "Ramesh K", "slack_id": null, "team": "Platform", "wip": 4},
+    {"name": "Mei C", "slack_id": "U0123ABF", "team": "Platform", "wip": 2},
+    {"name": "Lucia F", "slack_id": "U0456GRD", "team": "Growth", "wip": 1},
+    {"name": "Daniel O", "slack_id": "U0456GRA", "team": "Growth", "wip": 3},
+    {"name": "Aisha N", "slack_id": "U0456GRB", "team": "Growth", "wip": 5},
+    {"name": "Jonas B", "slack_id": "U0456GRC", "team": "Growth", "wip": 2}
+  ],
+  "trend": [
+    {"date": "2026-10-14", "red": 0, "yellow": 3},
+    {"date": "2026-10-15", "red": 0, "yellow": 2},
+    {"date": "2026-10-16", "red": 1, "yellow": 2},
+    {"date": "2026-10-17", "red": 1, "yellow": 3},
+    {"date": "2026-10-18", "red": 0, "yellow": 3},
+    {"date": "2026-10-19", "red": 0, "yellow": 2},
+    {"date": "2026-10-20", "red": 0, "yellow": 4},
+    {"date": "2026-10-21", "red": 1, "yellow": 4},
+    {"date": "2026-10-22", "red": 1, "yellow": 5},
+    {"date": "2026-10-23", "red": 1, "yellow": 3},
+    {"date": "2026-10-24", "red": 1, "yellow": 3},
+    {"date": "2026-10-25", "red": 2, "yellow": 3},
+    {"date": "2026-10-26", "red": 2, "yellow": 5},
+    {"date": "2026-10-27", "red": 2, "yellow": 4}
+  ],
+  "coverage_notes": [
+    "Slack: #proj-search is not readable by the connector, so Slack signals for Search Revamp are omitted"
+  ]
+}
+</script>
+
+<script>
+(function () {
+  "use strict";
+  var LABEL = { red: "Red", yellow: "Yellow", green: "Green" };
+  var MEANING = { red: "Off track", yellow: "At risk", green: "On track" };
+  var RANK = { red: 0, yellow: 1, green: 2 };
+  var NS = "http://www.w3.org/2000/svg";
+
+  // Build DOM from data with textContent only: connector text is data, never markup.
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (attrs[k] == null || attrs[k] === false) continue;
+      if (k === "text") n.textContent = attrs[k];
+      else if (k === "class") n.className = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c != null) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function svg(tag, attrs) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function glyph(s) {
+    var g = svg("svg", { "class": "glyph", "data-s": s, viewBox: "0 0 16 16", "aria-hidden": "true" });
+    g.appendChild(svg("use", { href: "#g-" + s }));
+    return g;
+  }
+  function safeUrl(u) { return /^https:\/\//.test(u || "") ? u : null; }
+  function pingUrl(id) { return "https://slack.com/app_redirect?channel=" + encodeURIComponent(id); }
+
+  // A person with no Slack id is shown by name only: no link, no ping.
+  function ownerBits(o, prefix) {
+    var bits = [];
+    if (prefix) bits.push(prefix);
+    bits.push(el("b", { text: o && o.name ? o.name : "Unowned" }));
+    if (o && o.slack_id) bits.push(el("a", { "class": "ping", href: pingUrl(o.slack_id), target: "_blank", rel: "noopener", text: "Ping", "aria-label": "Ping " + o.name + " on Slack" }));
+    return bits;
+  }
+
+  function fmtDate(iso, opts) {
+    var d = new Date(iso);
+    return isNaN(d) ? String(iso || "") : d.toLocaleString("en-GB", opts);
+  }
+
+  function header(D) {
+    var s = D.summary || {};
+    var stats = el("div", { "class": "stats", role: "list", "aria-label": "Projects by status" },
+      ["red", "yellow", "green"].map(function (k) {
+        return el("div", { "class": "stat", "data-status": k, role: "listitem" }, [
+          el("div", { "class": "stat-label" }, [glyph(k), LABEL[k]]),
+          el("div", { "class": "stat-value", text: String(s[k] || 0) }),
+          el("div", { "class": "stat-sub", text: MEANING[k] })
+        ]);
+      }));
+    var win = D.window || {};
+    return el("header", null, [
+      el("div", { "class": "title-block" }, [
+        el("div", { "class": "eyebrow", text: "Engineering pulse" }),
+        el("h1", { text: D.company || "" }),
+        el("div", { "class": "when", text: fmtDate(D.generated_at, { weekday: "long", day: "numeric", month: "long", year: "numeric" }) +
+          " · changes since " + fmtDate(win.start, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) })
+      ]),
+      stats
+    ]);
+  }
+
+  function projectCard(p, flagsById) {
+    var pct = Math.max(0, Math.min(100, Math.round(p.progress_pct || 0)));
+    var chips = (p.flags || []).map(function (id) { return flagsById[id]; }).filter(Boolean)
+      .sort(function (a, b) { return RANK[a.severity] - RANK[b.severity]; })
+      .map(function (f) {
+        return el("a", { "class": "chip", href: "#flag-" + f.id, title: LABEL[f.severity] + ": " + f.title }, [glyph(f.severity), f.signal]);
+      });
+    return el("article", { "class": "project-card panel", "data-status": p.status }, [
+      el("div", { "class": "top" }, [
+        el("h3", { text: p.name }),
+        el("span", { "class": "pill", "data-s": p.status }, [glyph(p.status), LABEL[p.status]])
+      ]),
+      el("div", { "class": "owner" }, ownerBits(p.owner, "Owner")),
+      el("div", { "class": "progress" }, [
+        el("div", { "class": "progress-row" }, [el("span", { text: "Progress" }), el("strong", { text: pct + "%" })]),
+        el("div", { "class": "bar", role: "progressbar", "aria-valuenow": pct, "aria-valuemin": 0, "aria-valuemax": 100, "aria-label": p.name + " progress" },
+          [el("span", { style: "width:" + pct + "%" })])
+      ]),
+      (p.epics && p.epics.length) ? el("ul", { "class": "epics" }, p.epics.map(function (e) {
+        return el("li", null, [el("span", { text: e.name }), el("span", { "class": "n", text: e.done + " / " + e.total })]);
+      })) : null,
+      el("div", { "class": "chips" }, chips.length ? chips : [el("span", { "class": "none", text: "No flags" })])
+    ]);
+  }
+
+  function signalsPanel(D, projectOf) {
+    var flags = (D.flags || []).map(function (f, i) { return [f, i]; })
+      .sort(function (a, b) { return (RANK[a[0].severity] - RANK[b[0].severity]) || (a[1] - b[1]); })
+      .map(function (x) { return x[0]; });
+    var head = el("div", { "class": "section-head" }, [
+      el("h2", { text: "Needs attention" }),
+      el("span", { "class": "hint", text: flags.length ? flags.length + (flags.length === 1 ? " flag" : " flags") + ", red first" : "" })
+    ]);
+    var body;
+    if (!flags.length) {
+      body = el("div", { "class": "flags-empty panel" }, [glyph("green"), el("div", null, [
+        el("strong", { text: "Nothing flagged" }),
+        el("span", { text: "No stuck, stale or blocked work in this window." })
+      ])]);
+    } else {
+      body = el("ol", { "class": "flags panel" }, flags.map(function (f) {
+        var url = safeUrl(f.url);
+        var meta = el("div", { "class": "meta" }, [
+          el("span", { "class": "sev", text: LABEL[f.severity] }),
+          el("span", { "class": "sig", text: f.signal }),
+          projectOf[f.id] ? el("span", { text: "· " + projectOf[f.id].join(", ") }) : el("span", { text: "· No project" }),
+          f.inferred ? el("span", { "class": "inferred", text: "inferred", title: "Inferred from indirect evidence; check before acting" }) : null
+        ]);
+        return el("li", { "class": "flag", id: "flag-" + f.id, "data-severity": f.severity, "data-signal": f.signal }, [
+          glyph(f.severity),
+          meta,
+          el("div", { "class": "title" }, [url ? el("a", { href: url, target: "_blank", rel: "noopener", text: f.title }) : f.title]),
+          el("div", { "class": "next", text: f.next_action }),
+          el("div", { "class": "foot" }, ownerBits(f.owner, "Owner"))
+        ]);
+      }));
+    }
+    return el("section", { "aria-label": "Flags" }, [head, body]);
+  }
+
+  function niceMax(v) { return v <= 4 ? 4 : v <= 6 ? 6 : v <= 8 ? 8 : Math.ceil(v / 5) * 5; }
+
+  function trendPanel(T) {
+    if (!T || !T.length) return null;
+    var section = el("section", { id: "trend", "aria-label": "Flag trend" });
+    section.appendChild(el("div", { "class": "section-head" }, [el("h2", { text: "Flags over 14 days" }), el("span", { "class": "hint", text: "daily count" })]));
+    var panel = el("div", { "class": "panel chart-panel" });
+    section.appendChild(panel);
+    if (T.length < 2) {
+      panel.appendChild(el("div", { "class": "hint", text: "Trend appears after two reports are stored." }));
+      return section;
+    }
+    panel.appendChild(el("div", { "class": "legend" }, [
+      el("span", null, [el("i", { style: "background:var(--red)" }), "Red flags"]),
+      el("span", null, [el("i", { style: "background:var(--yellow)" }), "Yellow flags"])
+    ]));
+    var W = 360, H = 150, L = 22, R = 26, Tp = 10, B = 22;
+    var max = niceMax(Math.max.apply(null, T.map(function (t) { return Math.max(t.red, t.yellow); })));
+    var x = function (i) { return L + (W - L - R) * i / (T.length - 1); };
+    var y = function (v) { return Tp + (H - Tp - B) * (1 - v / max); };
+    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Red and yellow flag counts per day, " + T[0].date + " to " + T[T.length - 1].date });
+    [0, max / 2, max].forEach(function (v) {
+      s.appendChild(svg("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: "var(--line)", "stroke-width": 1 }));
+      var t = svg("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", "class": "axis-text" }); t.textContent = v; s.appendChild(t);
+    });
+    function short(d) { return fmtDate(d + "T12:00:00Z", { day: "numeric", month: "short", timeZone: "UTC" }); }
+    [[0, "start"], [T.length - 1, "end"]].forEach(function (a) {
+      var t = svg("text", { x: x(a[0]), y: H - 5, "text-anchor": a[1], "class": "axis-text" }); t.textContent = short(T[a[0]].date); s.appendChild(t);
+    });
+    [["yellow", "var(--yellow)"], ["red", "var(--red)"]].forEach(function (sr) {
+      var pts = T.map(function (t, i) { return x(i).toFixed(1) + "," + y(t[sr[0]]).toFixed(1); });
+      s.appendChild(svg("path", { d: "M" + x(0) + "," + y(0) + " L" + pts.join(" L") + " L" + x(T.length - 1) + "," + y(0) + " Z", fill: sr[1], "fill-opacity": 0.1, stroke: "none" }));
+      s.appendChild(svg("path", { d: "M" + pts.join(" L"), fill: "none", stroke: sr[1], "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      var last = T[T.length - 1][sr[0]];
+      s.appendChild(svg("circle", { cx: x(T.length - 1), cy: y(last), r: 4, fill: sr[1], stroke: "var(--surface)", "stroke-width": 2 }));
+    });
+    // End labels: one per series, nudged apart only if they would touch.
+    var lr = T[T.length - 1].red, ly = T[T.length - 1].yellow;
+    var yr = y(lr) + 4, yy = y(ly) + 4;
+    if (Math.abs(yr - yy) < 12) { if (lr >= ly) { yr = yy - 12; } else { yy = yr - 12; } }
+    [[lr, yr], [ly, yy]].forEach(function (e) {
+      var t = svg("text", { x: x(T.length - 1) + 8, y: e[1], "class": "end-label" }); t.textContent = e[0]; s.appendChild(t);
+    });
+    var cross = svg("line", { y1: Tp, y2: H - B, stroke: "var(--line-strong)", "stroke-width": 1, visibility: "hidden" });
+    s.appendChild(cross);
+    var hit = svg("rect", { x: L, y: 0, width: W - L - R, height: H, fill: "transparent" });
+    s.appendChild(hit);
+    var wrap = el("div", { "class": "trend-wrap" }, [s]);
+    var tip = el("div", { "class": "tip", hidden: "hidden" });
+    wrap.appendChild(tip);
+    function show(evt) {
+      var r = s.getBoundingClientRect();
+      var px = (evt.clientX - r.left) * W / r.width;
+      var i = Math.max(0, Math.min(T.length - 1, Math.round((px - L) / (W - L - R) * (T.length - 1))));
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+      tip.textContent = "";
+      tip.appendChild(el("div", { "class": "d", text: short(T[i].date) }));
+      tip.appendChild(el("div", { text: "Red " + T[i].red + " · Yellow " + T[i].yellow }));
+      tip.hidden = false;
+      tip.style.left = (x(i) * r.width / W) + "px";
+      tip.style.top = (y(Math.max(T[i].red, T[i].yellow)) * r.height / H) + "px";
+    }
+    hit.addEventListener("pointermove", show);
+    hit.addEventListener("pointerleave", function () { tip.hidden = true; cross.setAttribute("visibility", "hidden"); });
+    panel.appendChild(wrap);
+    var table = el("table", { "class": "sr-only" }, [el("caption", { text: "Flags per day" }),
+      el("tr", null, [el("th", { text: "Date" }), el("th", { text: "Red" }), el("th", { text: "Yellow" })])]
+      .concat(T.map(function (t) { return el("tr", null, [el("td", { text: t.date }), el("td", { text: String(t.red) }), el("td", { text: String(t.yellow) })]); })));
+    panel.appendChild(table);
+    return section;
+  }
+
+  function peoplePanel(P) {
+    if (!P || !P.length) return null;   // exec and PM dashboards carry no per-person strip
+    var section = el("section", { id: "people", "aria-label": "Work in progress" });
+    section.appendChild(el("div", { "class": "section-head" }, [el("h2", { text: "Work in progress" }), el("span", { "class": "hint", text: "open items per person, by team" })]));
+    var teams = [];
+    P.forEach(function (p) { if (teams.indexOf(p.team) < 0) teams.push(p.team); });
+    var max = Math.max(1, Math.max.apply(null, P.map(function (p) { return p.wip; })));
+    var panel = el("div", { "class": "panel people" });
+    teams.forEach(function (t) {
+      var members = P.filter(function (p) { return p.team === t; })
+        .sort(function (a, b) { return a.name.localeCompare(b.name); });
+      panel.appendChild(el("div", { "class": "team" }, [el("h3", { text: t })].concat(members.map(function (p) {
+        return el("div", { "class": "person", "data-team": t, "data-name": p.name, title: p.name + ": " + p.wip + " in progress" }, [
+          el("span", { "class": "nm", text: p.name }),
+          el("span", { "class": "track" }, [
+            el("span", { "class": "w", style: "width:calc((100% - 2.5em) * " + (p.wip / max).toFixed(3) + ")" }),
+            el("span", { "class": "v", text: String(p.wip) })
+          ])
+        ]);
+      }))));
+    });
+    section.appendChild(panel);
+    return section;
+  }
+
+  // Sources actually read: every connector except those whose recipe coverage line says
+  // "<Connector> not connected" or "<Connector> not configured".
+  function sourcesRead(notes) {
+    var missing = {};
+    notes.forEach(function (n) {
+      var m = /^(Linear|GitHub|Slack) not (connected|configured)\b/.exec(n);
+      if (m) missing[m[1]] = true;
+    });
+    var read = ["Linear", "GitHub", "Slack"].filter(function (c) { return !missing[c]; });
+    if (read.length < 2) return read.join("");
+    return read.slice(0, -1).join(", ") + " and " + read[read.length - 1];
+  }
+
+  function footer(D) {
+    var notes = D.coverage_notes || [];
+    var fromFixtures = notes.indexOf("source: fixtures") >= 0;
+    var src = sourcesRead(notes);
+    return el("footer", null, [
+      notes.length ? el("div", null, [el("div", { "class": "eyebrow", text: "Coverage" }),
+        el("ul", null, notes.map(function (n) { return el("li", { text: n }); }))])
+        : el("div", { text: "Coverage: all connectors connected." }),
+      el("div", { "class": "sources", text: "Generated " + fmtDate(D.generated_at, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) +
+        " by eng-pulse from " + (src || "no connector") + (fromFixtures ? " (saved fixtures)" : "") +
+        ". Items marked inferred come from indirect evidence." })
+    ]);
+  }
+
+  function render(D) {
+    var app = document.getElementById("app");
+    window.PULSE_DATA = D;
+    var flagsById = {}, projectOf = {};
+    (D.flags || []).forEach(function (f) { flagsById[f.id] = f; });
+    var projects = (D.projects || []).map(function (p, i) { return [p, i]; })
+      .sort(function (a, b) { return (RANK[a[0].status] - RANK[b[0].status]) || (a[1] - b[1]); })
+      .map(function (x) { return x[0]; });
+    projects.forEach(function (p) { (p.flags || []).forEach(function (id) { (projectOf[id] = projectOf[id] || []).push(p.name); }); });
+    if (D.company) document.title = D.company + " Engineering Pulse";
+    app.appendChild(header(D));
+    app.appendChild(el("section", { "aria-label": "Projects" }, [
+      el("div", { "class": "section-head" }, [el("h2", { text: "Projects" }), el("span", { "class": "hint", text: "red first" })]),
+      el("div", { "class": "projects" }, projects.map(function (p) { return projectCard(p, flagsById); }))
+    ]));
+    var side = [trendPanel(D.trend), peoplePanel(D.people)].filter(Boolean);
+    app.appendChild(el("div", { "class": side.length ? "lower" : "lower solo" }, [signalsPanel(D, projectOf)]
+      .concat(side.length ? [el("div", { "class": "side" }, side)] : [])));
+    app.appendChild(footer(D));
+  }
+
+  var app = document.getElementById("app");
+  try {
+    render(JSON.parse(document.getElementById("pulse-data").textContent));
+  } catch (e) {
+    app.textContent = "";
+    app.appendChild(el("div", { "class": "panel error", text: "This report could not be drawn: its data block is not valid PULSE_DATA (" + e.message + ")." }));
+  }
+  app.setAttribute("data-rendered", "");
+})();
+</script>
+</body>
+</html>

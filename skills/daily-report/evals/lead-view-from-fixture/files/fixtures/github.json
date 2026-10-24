@@ -1,0 +1,93 @@
+{
+  "connected": true,
+  "prs": [
+    {
+      "url": "https://github.com/acme/payments-api/pull/41",
+      "repo": "acme/payments-api",
+      "number": 41,
+      "title": "PLT-106 Card tokenisation vault",
+      "author_login": "priya-s",
+      "draft": false,
+      "state": "merged",
+      "created_at": "2026-10-25T07:00:00+05:30",
+      "updated_at": "2026-10-27T03:00:00+05:30",
+      "last_commit_at": "2026-10-27T00:00:00+05:30",
+      "last_comment_at": "2026-10-27T02:00:00+05:30",
+      "review_state": "approved",
+      "changes_requested_count": 0,
+      "review_comment_count": 6,
+      "requested_reviewer_logins": [],
+      "checks": "passing",
+      "merged_at": "2026-10-27T03:00:00+05:30",
+      "linked_issue_identifiers": [
+        "PLT-106"
+      ]
+    },
+    {
+      "url": "https://github.com/acme/payments-api/pull/42",
+      "repo": "acme/payments-api",
+      "number": 42,
+      "title": "PLT-107 3-D Secure fallback flow",
+      "author_login": "arjun-k",
+      "draft": false,
+      "state": "merged",
+      "created_at": "2026-10-25T17:00:00+05:30",
+      "updated_at": "2026-10-26T21:00:00+05:30",
+      "last_commit_at": "2026-10-26T19:00:00+05:30",
+      "last_comment_at": "2026-10-26T20:00:00+05:30",
+      "review_state": "approved",
+      "changes_requested_count": 0,
+      "review_comment_count": 2,
+      "requested_reviewer_logins": [],
+      "checks": "passing",
+      "merged_at": "2026-10-26T21:00:00+05:30",
+      "linked_issue_identifiers": [
+        "PLT-107"
+      ]
+    },
+    {
+      "url": "https://github.com/acme/mobile-app/pull/11",
+      "repo": "acme/mobile-app",
+      "number": 11,
+      "title": "GRO-205 OTP entry screen",
+      "author_login": "lena-m",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-26T23:00:00+05:30",
+      "updated_at": "2026-10-26T23:00:00+05:30",
+      "last_commit_at": "2026-10-26T23:00:00+05:30",
+      "last_comment_at": "2026-10-26T23:00:00+05:30",
+      "review_state": "none",
+      "changes_requested_count": 0,
+      "review_comment_count": 0,
+      "requested_reviewer_logins": [
+        "sam-r"
+      ],
+      "checks": "pending",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "GRO-205"
+      ]
+    },
+    {
+      "url": "https://github.com/acme/payments-api/pull/43",
+      "repo": "acme/payments-api",
+      "number": 43,
+      "title": "Bump stripe-mock to 0.190",
+      "author_login": "arjun-k",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-27T04:00:00+05:30",
+      "updated_at": "2026-10-27T06:00:00+05:30",
+      "last_commit_at": "2026-10-27T04:00:00+05:30",
+      "last_comment_at": "2026-10-27T06:00:00+05:30",
+      "review_state": "approved",
+      "changes_requested_count": 0,
+      "review_comment_count": 0,
+      "requested_reviewer_logins": [],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": []
+    }
+  ]
+}

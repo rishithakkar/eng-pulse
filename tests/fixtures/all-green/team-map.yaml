@@ -1,0 +1,80 @@
+# eng-pulse test fixture team map: placeholder company and people.
+# Fixture: all-green. window.end = 2026-10-27T09:00:00+05:30.
+eng_pulse_version: 1
+company: Acme
+timezone: Asia/Kolkata
+working_days:
+- Mon
+- Tue
+- Wed
+- Thu
+- Fri
+thresholds:
+  review_wait_hours: 24
+  stale_pr_hours: 48
+  contested_comments: 15
+  idle_issue_days: 3
+  blocker_unanswered_hours: 4
+  wip_warn: 4
+  health_stale_days: 7
+github_org: acme
+projects:
+- name: Payments v2
+  aliases:
+  - payments
+  - pay-v2
+  linear_project_id: 11111111-1111-4111-8111-111111111111
+  repos:
+  - acme/payments-api
+  slack_channels:
+  - '#proj-payments'
+  owner: priya
+- name: Mobile Onboarding
+  aliases:
+  - onboarding
+  - mobile
+  linear_project_id: 22222222-2222-4222-8222-222222222222
+  repos:
+  - acme/mobile-app
+  slack_channels:
+  - '#proj-onboarding'
+  owner: sam
+teams:
+- name: Platform
+  linear_team_id: 33333333-3333-4333-8333-333333333333
+  lead: arjun
+  manager: priya
+  members:
+  - arjun
+  - priya
+- name: Growth
+  linear_team_id: 44444444-4444-4444-8444-444444444444
+  lead: sam
+  manager: priya
+  members:
+  - sam
+  - lena
+people:
+  priya:
+    name: Priya S
+    role: Engineering Manager
+    linear: 55555555-5555-4555-8555-555555555551
+    github: priya-s
+    slack: U0123ABC
+  arjun:
+    name: Arjun K
+    role: Tech Lead
+    linear: 55555555-5555-4555-8555-555555555552
+    github: arjun-k
+    slack: U0123ABD
+  sam:
+    name: Sam R
+    role: Tech Lead
+    linear: 55555555-5555-4555-8555-555555555555
+    github: sam-r
+    slack: U0123ABG
+  lena:
+    name: Lena M
+    role: Engineer
+    linear: 55555555-5555-4555-8555-555555555556
+    github: lena-m
