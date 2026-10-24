@@ -3,6 +3,7 @@ import json
 import re
 from pathlib import Path
 
+import jsonschema
 import yaml
 
 
@@ -57,3 +58,32 @@ def test_repo_hygiene_files_exist():
 def test_gitignore_protects_private_files():
     gi = read(".gitignore")
     assert "docs/superpowers/" in gi and "team-map.yaml" in gi
+
+
+THRESHOLD_KEYS = {"review_wait_hours", "stale_pr_hours", "contested_comments",
+                  "idle_issue_days", "blocker_unanswered_hours", "wip_warn",
+                  "health_stale_days"}
+
+
+def test_example_team_map_validates():
+    schema = json.loads(read("schemas/team-map.schema.json"))
+    jsonschema.validate(load_yaml(repo_root() / "team-map.example.yaml"), schema)
+
+
+def test_example_team_map_cross_references_resolve():
+    m = load_yaml(repo_root() / "team-map.example.yaml")
+    people = set(m["people"])
+    for p in m["projects"]:
+        assert p["owner"] in people
+    for t in m["teams"]:
+        assert t["lead"] in people and t["manager"] in people
+        assert set(t["members"]) <= people
+
+
+def test_example_team_map_has_all_threshold_keys():
+    m = load_yaml(repo_root() / "team-map.example.yaml")
+    assert set(m["thresholds"]) == THRESHOLD_KEYS
+
+
+def test_model_schema_is_valid_draft2020():
+    jsonschema.Draft202012Validator.check_schema(json.loads(read("schemas/model.schema.json")))

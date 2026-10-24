@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/eng-pulse/team-map.schema.json",
+  "title": "eng-pulse team map",
+  "type": "object",
+  "properties": {
+    "eng_pulse_version": {
+      "const": 1
+    },
+    "company": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timezone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "working_days": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat",
+          "Sun"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "thresholds": {
+      "type": "object",
+      "properties": {
+        "review_wait_hours": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stale_pr_hours": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "contested_comments": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "idle_issue_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "blocker_unanswered_hours": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "wip_warn": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "health_stale_days": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "review_wait_hours",
+        "stale_pr_hours",
+        "contested_comments",
+        "idle_issue_days",
+        "blocker_unanswered_hours",
+        "wip_warn",
+        "health_stale_days"
+      ],
+      "additionalProperties": false
+    },
+    "github_org": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "linear_project_id": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "repos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[^/\\s]+/[^/\\s]+$"
+            }
+          },
+          "slack_channels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name",
+          "linear_project_id",
+          "owner"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "linear_team_id": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "lead": {
+            "type": "string"
+          },
+          "manager": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "linear_team_id",
+          "lead",
+          "manager",
+          "members"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "people": {
+      "type": "object",
+      "patternProperties": {
+        "^[A-Za-z0-9_.-]+$": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "role": {
+              "type": "string"
+            },
+            "linear": {
+              "type": "string"
+            },
+            "github": {
+              "type": "string"
+            },
+            "slack": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "report_preferences": {
+      "type": "object",
+      "patternProperties": {
+        "^[A-Za-z0-9]+$": {
+          "type": "object",
+          "properties": {
+            "audience": {
+              "enum": [
+                "exec",
+                "pm",
+                "lead"
+              ]
+            },
+            "destination": {
+              "enum": [
+                "artifact",
+                "pdf",
+                "markdown",
+                "slack"
+              ]
+            }
+          },
+          "required": [
+            "audience",
+            "destination"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "eng_pulse_version",
+    "company",
+    "timezone",
+    "thresholds",
+    "projects",
+    "people"
+  ],
+  "additionalProperties": false
+}
