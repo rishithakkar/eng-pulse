@@ -35,7 +35,7 @@ About two minutes, plus the GitHub step if you want PR signals.
 > **Claude.ai's built-in GitHub integration cannot read pull requests.** It only syncs repository files into Projects, so eng-pulse treats it as "GitHub not connected".
 > Add GitHub's MCP server as a **custom connector** instead: URL `https://api.githubcopilot.com/mcp/readonly`, authentication "No sign in", and the request header `Authorization: Bearer <fine-grained read-only PAT>` (plus `X-MCP-Toolsets: pull_requests,repos,actions`). [CONNECTORS.md](CONNECTORS.md#github) has the token permissions and an OAuth-app alternative.
 >
-> **eng-pulse works without GitHub.** The report then leaves out the PR signals (stuck, stale and contested PRs, the PR side of board mismatch, and the linked-PR activity check of idle issues) and says so in one coverage line.
+> **eng-pulse works without GitHub.** The report then leaves out the PR signals (stuck, stale and contested PRs, board mismatches, and the linked-PR activity check of idle issues) and says so in one coverage line.
 
 4. **Run setup.** Ask Claude to "set up eng-pulse". In Cowork it writes `team-map.yaml` at the root of the connected folder. In Claude.ai it gives you the file to add to your Project's knowledge.
 
@@ -43,7 +43,7 @@ Then ask for the daily report.
 
 ## Try it offline in 30 seconds
 
-Every skill can run on saved data with no connectors at all (`references/fixture-mode.md`). The plugin ships a sample company in `tests/fixtures/board_mismatch`. With the plugin installed, send:
+`daily-report` and `ask` can run on saved data with no connectors at all (`references/fixture-mode.md`; `setup` has its own `discovery:` file). The plugin ships a sample company in `tests/fixtures/board_mismatch`. With the plugin installed, send:
 
 ```
 Run the daily report. I'm the CEO; give me the exec brief as markdown.
