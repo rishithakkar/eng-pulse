@@ -1,0 +1,53 @@
+{
+  "connected": true,
+  "prs": [
+    {
+      "url": "https://github.com/acme/payments-api/pull/33",
+      "repo": "acme/payments-api",
+      "number": 33,
+      "title": "PLT-103 Split settlement into its own service",
+      "author_login": "priya-s",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-25T17:00:00+05:30",
+      "updated_at": "2026-10-27T07:00:00+05:30",
+      "last_commit_at": "2026-10-27T06:00:00+05:30",
+      "last_comment_at": "2026-10-27T07:00:00+05:30",
+      "review_state": "changes_requested",
+      "changes_requested_count": 2,
+      "review_comment_count": 15,
+      "requested_reviewer_logins": [
+        "arjun-k"
+      ],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "PLT-103"
+      ]
+    },
+    {
+      "url": "https://github.com/acme/mobile-app/pull/9",
+      "repo": "acme/mobile-app",
+      "number": 9,
+      "title": "GRO-203 New onboarding carousel",
+      "author_login": "lena-m",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-26T03:00:00+05:30",
+      "updated_at": "2026-10-27T05:00:00+05:30",
+      "last_commit_at": "2026-10-27T04:00:00+05:30",
+      "last_comment_at": "2026-10-27T05:00:00+05:30",
+      "review_state": "changes_requested",
+      "changes_requested_count": 2,
+      "review_comment_count": 14,
+      "requested_reviewer_logins": [
+        "sam-r"
+      ],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "GRO-203"
+      ]
+    }
+  ]
+}

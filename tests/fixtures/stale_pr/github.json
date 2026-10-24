@@ -1,0 +1,49 @@
+{
+  "connected": true,
+  "prs": [
+    {
+      "url": "https://github.com/acme/payments-api/pull/21",
+      "repo": "acme/payments-api",
+      "number": 21,
+      "title": "PLT-102 Ledger export as CSV",
+      "author_login": "priya-s",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-21T09:00:00+05:30",
+      "updated_at": "2026-10-25T07:00:00+05:30",
+      "last_commit_at": "2026-10-25T05:00:00+05:30",
+      "last_comment_at": "2026-10-25T07:00:00+05:30",
+      "review_state": "approved",
+      "changes_requested_count": 0,
+      "review_comment_count": 3,
+      "requested_reviewer_logins": [],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "PLT-102"
+      ]
+    },
+    {
+      "url": "https://github.com/acme/mobile-app/pull/8",
+      "repo": "acme/mobile-app",
+      "number": 8,
+      "title": "GRO-202 Searchable country picker",
+      "author_login": "lena-m",
+      "draft": false,
+      "state": "open",
+      "created_at": "2026-10-24T09:00:00+05:30",
+      "updated_at": "2026-10-25T10:00:00+05:30",
+      "last_commit_at": "2026-10-25T08:00:00+05:30",
+      "last_comment_at": "2026-10-25T10:00:00+05:30",
+      "review_state": "approved",
+      "changes_requested_count": 0,
+      "review_comment_count": 2,
+      "requested_reviewer_logins": [],
+      "checks": "passing",
+      "merged_at": null,
+      "linked_issue_identifiers": [
+        "GRO-202"
+      ]
+    }
+  ]
+}

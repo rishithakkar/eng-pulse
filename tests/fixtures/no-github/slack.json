@@ -1,0 +1,17 @@
+{
+  "connected": true,
+  "threads": [
+    {
+      "channel": "#proj-onboarding",
+      "url": "https://acme.slack.com/archives/C0ONBOARD/p1761538000000500",
+      "started_at": "2026-10-27T04:00:00+05:30",
+      "last_reply_at": "2026-10-27T04:00:00+05:30",
+      "reply_count": 0,
+      "author_slack_id": "U0123ABC",
+      "mentioned_slack_ids": [],
+      "text_excerpt": "Stuck: the push notification sandbox cert expired and builds are failing.",
+      "is_blocker_candidate": true,
+      "answered": false
+    }
+  ]
+}

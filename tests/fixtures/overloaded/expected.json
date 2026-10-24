@@ -1,0 +1,20 @@
+{
+  "flags": [
+    {
+      "signal": "overloaded",
+      "subject": "lena",
+      "owner": "sam",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "green",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "priya",
+      "reason": "two issues In Progress, equal to thresholds.wip_warn; only more than the threshold flags"
+    }
+  ]
+}

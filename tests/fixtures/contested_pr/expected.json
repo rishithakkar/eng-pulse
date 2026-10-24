@@ -1,0 +1,20 @@
+{
+  "flags": [
+    {
+      "signal": "contested_pr",
+      "subject": "https://github.com/acme/payments-api/pull/33",
+      "owner": "priya",
+      "inferred": false
+    }
+  ],
+  "project_status": {
+    "Payments v2": "yellow",
+    "Mobile Onboarding": "green"
+  },
+  "near_miss": [
+    {
+      "subject": "https://github.com/acme/mobile-app/pull/9",
+      "reason": "two change requests but review_comment_count is one below thresholds.contested_comments; both conditions are required"
+    }
+  ]
+}

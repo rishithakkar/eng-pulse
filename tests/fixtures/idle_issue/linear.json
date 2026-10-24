@@ -1,0 +1,93 @@
+{
+  "window": {
+    "start": "2026-10-26T18:00:00+05:30",
+    "end": "2026-10-27T09:00:00+05:30",
+    "timezone": "Asia/Kolkata"
+  },
+  "connected": true,
+  "issues": [
+    {
+      "id": "66666666-6666-4666-8666-000000000104",
+      "identifier": "PLT-104",
+      "title": "Chargeback webhook retries",
+      "url": "https://linear.app/acme/issue/PLT-104/chargeback-webhook-retries",
+      "project_id": "11111111-1111-4111-8111-111111111111",
+      "team_id": "33333333-3333-4333-8333-333333333333",
+      "state": "In Progress",
+      "state_type": "started",
+      "assignee_id": "55555555-5555-4555-8555-555555555551",
+      "priority": 2,
+      "estimate": 2,
+      "parent_id": null,
+      "milestone_id": null,
+      "created_at": "2026-10-17T09:00:00+05:30",
+      "updated_at": "2026-10-23T09:00:00+05:30",
+      "last_activity_at": "2026-10-23T09:00:00+05:30",
+      "branch": null,
+      "linked_pr_urls": [],
+      "blocked_by": []
+    },
+    {
+      "id": "66666666-6666-4666-8666-000000000105",
+      "identifier": "PLT-105",
+      "title": "Payout schedule settings",
+      "url": "https://linear.app/acme/issue/PLT-105/payout-schedule-settings",
+      "project_id": "11111111-1111-4111-8111-111111111111",
+      "team_id": "33333333-3333-4333-8333-333333333333",
+      "state": "In Progress",
+      "state_type": "started",
+      "assignee_id": "55555555-5555-4555-8555-555555555552",
+      "priority": 2,
+      "estimate": 2,
+      "parent_id": null,
+      "milestone_id": null,
+      "created_at": "2026-10-17T09:00:00+05:30",
+      "updated_at": "2026-10-24T10:00:00+05:30",
+      "last_activity_at": "2026-10-24T10:00:00+05:30",
+      "branch": null,
+      "linked_pr_urls": [],
+      "blocked_by": []
+    },
+    {
+      "id": "66666666-6666-4666-8666-000000000204",
+      "identifier": "GRO-204",
+      "title": "Email magic-link sign-in",
+      "url": "https://linear.app/acme/issue/GRO-204/email-magic-link-sign-in",
+      "project_id": "22222222-2222-4222-8222-222222222222",
+      "team_id": "44444444-4444-4444-8444-444444444444",
+      "state": "In Progress",
+      "state_type": "started",
+      "assignee_id": "55555555-5555-4555-8555-555555555556",
+      "priority": 2,
+      "estimate": 2,
+      "parent_id": null,
+      "milestone_id": null,
+      "created_at": "2026-10-17T09:00:00+05:30",
+      "updated_at": "2026-10-22T09:00:00+05:30",
+      "last_activity_at": "2026-10-22T09:00:00+05:30",
+      "branch": null,
+      "linked_pr_urls": [
+        "https://github.com/acme/mobile-app/pull/10"
+      ],
+      "blocked_by": []
+    }
+  ],
+  "project_updates": [
+    {
+      "project_id": "11111111-1111-4111-8111-111111111111",
+      "health": "onTrack",
+      "created_at": "2026-10-26T07:00:00+05:30",
+      "url": "https://linear.app/acme/project/payments-v2/updates#update-1",
+      "author_id": "55555555-5555-4555-8555-555555555551"
+    },
+    {
+      "project_id": "22222222-2222-4222-8222-222222222222",
+      "health": "onTrack",
+      "created_at": "2026-10-26T03:00:00+05:30",
+      "url": "https://linear.app/acme/project/mobile-onboarding/updates#update-2",
+      "author_id": "55555555-5555-4555-8555-555555555555"
+    }
+  ],
+  "cycles": [],
+  "coverage_notes": []
+}

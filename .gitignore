@@ -3,6 +3,8 @@ docs/superpowers/
 
 # Company-specific config never belongs in the repo
 team-map.yaml
+# ...except the placeholder maps that ship with test fixtures
+!tests/fixtures/*/team-map.yaml
 
 # OS / editor
 .DS_Store
