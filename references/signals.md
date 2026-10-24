@@ -31,7 +31,7 @@ next_action: "{owner}: review {subject}, waiting {age} for a first review"
 visible_in: [pm, lead]
 ```
 
-**Definition:** A PR where `state == open`, `draft == false`, `review_state in {none, required}`, it has had no review of any kind (`changes_requested_count == 0`, `review_comment_count == 0` and `last_comment_at == created_at`), and `now - created_at > thresholds.review_wait_hours`. Subject: the PR `url`. `{age}` is `now - created_at`.
+**Definition:** A PR where `state == open`, `draft == false`, `review_state in {none, required}`, it has had no review of any kind (`changes_requested_count == 0` and `review_comment_count == 0`; conversation comments, such as a bot or the author pinging a reviewer, are not reviews and do not stop the flag), and `now - created_at > thresholds.review_wait_hours`. Subject: the PR `url`. `{age}` is `now - created_at`.
 
 **Fixture:** tests/fixtures/stuck_pr/
 

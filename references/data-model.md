@@ -42,7 +42,7 @@ Conventions: all timestamps are ISO 8601 strings with an offset. `id` fields on 
 | `created_at` | timestamp | GitHub `created_at` | `stuck_pr` |
 | `updated_at` | timestamp | GitHub `updated_at` | window filtering |
 | `last_commit_at` | timestamp | `pull_request_read` commits, newest | `stale_pr`, `idle_issue` |
-| `last_comment_at` | timestamp | newest comment or review; equals `created_at` when there are none | `stuck_pr`, `stale_pr`, `idle_issue` |
+| `last_comment_at` | timestamp | newest comment or review; equals `created_at` when there are none | `stale_pr`, `idle_issue` |
 | `review_state` | `none` \| `required` \| `approved` \| `changes_requested` | GitHub review decision | `stuck_pr` |
 | `changes_requested_count` | integer | count of `CHANGES_REQUESTED` reviews | `contested_pr`, `stuck_pr` |
 | `review_comment_count` | integer | GitHub `review_comments` | `contested_pr`, `stuck_pr` |
