@@ -311,3 +311,48 @@ def test_recipes_and_guides_name_thresholds_never_values():
         text = read(f"references/{f}")
         for key in THRESHOLD_KEYS:
             assert not re.search(rf"{key}\W{{0,4}}\d", text), (f, key)
+
+
+# --- Task 5: report formats and golden examples -------------------------------
+
+def parse_signals_shown(text: str) -> set[str]:
+    """Signal ids from the bullet list under `## Signals shown`, up to the next `## `."""
+    m = re.search(r"^## Signals shown\n(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL)
+    assert m, "missing ## Signals shown section"
+    ids = set()
+    for line in m.group(1).splitlines():
+        b = re.match(r"\s*[-*]\s+`?([a-z_]+)`?", line)
+        if b:
+            ids.add(b.group(1))
+    assert ids, "## Signals shown lists no signal ids"
+    return ids
+
+
+def test_formats_only_show_signals_allowed_for_their_audience():
+    sig = parse_signals(repo_root() / "references/signals.md")
+    for fmt, aud in [("exec-brief","exec"),("pm-view","pm"),("lead-view","lead")]:
+        shown = parse_signals_shown(read(f"references/formats/{fmt}.md"))
+        assert shown <= set(sig)
+        for s in shown: assert aud in sig[s]["visible_in"]
+
+def test_exec_example_under_250_words_and_names_no_people():
+    ex = read("references/formats/examples/exec-brief.md")
+    assert len(ex.split()) <= 250
+    people = load_yaml(repo_root()/"tests/fixtures/board_mismatch/team-map.yaml")["people"]
+    for p in people.values(): assert p["name"] not in ex
+
+def test_lead_example_shows_wip_without_ranking():
+    ex = read("references/formats/examples/lead-view.md").lower()
+    assert "wip" in ex
+    for w in ["top performer","lowest","ranked","leaderboard"]: assert w not in ex
+
+def test_slack_post_is_draft_first_and_resolves_mentions():
+    f = read("references/formats/slack-post.md")
+    assert "draft" in f.lower() and "slack_send_message_draft" in f
+    assert "no slack id" in f.lower()          # Review Focus 1 fallback rule
+
+def test_every_flag_in_examples_carries_a_link():
+    for fmt in ["pm-view","lead-view"]:
+        ex = read(f"references/formats/examples/{fmt}.md")
+        flag_lines = [l for l in ex.splitlines() if l.lstrip().startswith(("- 🔴","- 🟡"))]
+        assert flag_lines and all("http" in l for l in flag_lines)
