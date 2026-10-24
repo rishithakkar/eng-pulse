@@ -49,10 +49,10 @@ Fixture mode (`references/fixture-mode.md`) makes no connector calls and uses th
 ## Adding a signal
 
 1. **Open an issue first** with the "New signal" template (`.github/ISSUE_TEMPLATE/new-signal.md`): definition, threshold, owner rule, next action, fixture.
-2. **Add a block to `references/signals.md`**: a `### <id>` heading, then a fenced `yaml` block with exactly these keys:
+2. **Add a block to `references/signals.md`**: a `### <id>` heading, then a fenced `yaml` block **on the very next line** (no blank line between them, or `parse_signals` in `tests/check.py` fails) with exactly these keys:
 
    ```yaml
-   id: <id>                      # same as the heading, snake_case
+   id: <id>                      # same as the heading; snake_case with an underscore, e.g. slow_ci
    severity: yellow              # red | yellow
    sources_required: [linear]    # any of linear, github, slack
    threshold_key: <key>          # a key in the team map's thresholds, or null
@@ -74,9 +74,14 @@ Fixture mode (`references/fixture-mode.md`) makes no connector calls and uses th
    ```
 
    The near miss is required. Make it sit just inside the threshold so an off-by-one shows up. Every id in the fixture must resolve against its `team-map.yaml`.
-5. **Add the id to `SIGNAL_IDS`** in `tests/check.py`, then run `pytest tests/`.
-6. **If the signal is visible to an audience**, list it under `## Signals shown` in that format's file in `references/formats/`. A format may only show signals whose `visible_in` includes its audience.
-7. **Add a CHANGELOG entry** under `## [Unreleased]`.
+5. **Register the id everywhere the signal set is listed.** The tests compare each of these with `references/signals.md`:
+   - `SIGNAL_IDS` in `tests/check.py`: the nine v0.1 ids are hard-coded there; add yours.
+   - The `signal` enum under `flags` → `items` in `schemas/dashboard.schema.json`.
+   - The coverage line of every source in `sources_required`: add the id to the `` `<Connector> not connected — … omitted` `` line in each matching `references/gather-<source>.md` (`gather-linear.md`, `gather-github.md`, `gather-slack.md`). The check only recognises ids that contain an underscore (plus the existing `blocked`, `overloaded` and `health`), which is why step 2 asks for one. Also add the id to the matching sentence in `skills/setup/SKILL.md` step 1 when it needs GitHub or Slack.
+   - If the subject is a new kind (not an issue, PR, thread, cycle, project or person), add how it attaches to projects in `references/rollup.md` ("Attaching flags to projects").
+6. **Run `pytest tests/`.** It must be green before you go on.
+7. **If the signal is visible to an audience**, list it under `## Signals shown` in that format's file in `references/formats/`. A format may only show signals whose `visible_in` includes its audience.
+8. **Add a CHANGELOG entry** under `## [Unreleased]`.
 
 ## Adding a format
 

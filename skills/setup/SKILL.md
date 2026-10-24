@@ -29,7 +29,7 @@ Look for an existing map at the root of the connected folder (Cowork), in Projec
 ## 1. Check connectors
 
 - **Linear — required.** If no Linear tools are available, stop: say Linear is required and point to `CONNECTORS.md` ("Linear and Slack").
-- **GitHub — optional.** If absent, say: without GitHub the reports omit the PR signals (stuck, stale and contested PRs, the PR side of board mismatch, and the linked-PR check of idle issues); setup continues and `github_org`/`repos` can be added later. Point to `CONNECTORS.md` ("GitHub"); the built-in GitHub integration does not count.
+- **GitHub — optional.** If absent, say: without GitHub the reports omit the PR signals (stuck, stale and contested PRs, board mismatches, and the linked-PR activity check of idle issues); setup continues and `github_org`/`repos` can be added later. Point to `CONNECTORS.md` ("GitHub"); the built-in GitHub integration does not count.
 - **Slack — optional.** If absent, say: without Slack the reports omit unanswered Slack blockers and cannot post to Slack; `slack_channels` and Slack ids can be added later.
 
 ## 2. Discover
