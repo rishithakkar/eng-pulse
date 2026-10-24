@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: project-status-question
+expected_outcome: |
+  Fixture board_mismatch. Payments v2 is yellow for one reason: PLT-106 (Card tokenisation vault)
+  is In Review while its PR acme/payments-api#41 is merged, a board_mismatch owned by Priya S
+  (<@U0123ABC>). PLT-107 is Done with its merged PR #42 (a near miss, not a flag). The answer is prose,
+  links its sources, stays on Payments v2 and ends with a source: fixtures coverage line.
+context:
+  scaffold_script: place-files.sh

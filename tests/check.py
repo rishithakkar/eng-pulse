@@ -407,7 +407,7 @@ def test_every_skill_has_at_least_two_eval_cases_in_cli_layout():
     # Ruling 3: only skills that already ship an evals/ folder; a later task
     # asserts that every skill has one.
     with_evals = [d for d in skill_dirs() if (d / "evals").is_dir()]
-    assert {"setup", "daily-report"} <= {d.name for d in with_evals}
+    assert {"setup", "daily-report", "ask"} <= {d.name for d in with_evals}
     for d in with_evals:
         cases = [c for c in (d/"evals").iterdir() if c.is_dir()]
         assert len(cases) >= 2, d.name
@@ -503,3 +503,51 @@ def test_eval_input_files_are_tracked_by_git():
     ignored = subprocess.run(["git", "check-ignore", "--no-index", *files], cwd=root,
                              capture_output=True, text=True).stdout.split()
     assert ignored == []
+
+
+# --- Task 9: ask skill with evals ---------------------------------------------
+
+ASK_CASES = {  # case -> source fixture in tests/fixtures/
+    "project-status-question": "board_mismatch",
+    "who-is-on-epic": "board_mismatch",
+    "whats-stuck-today": "board_mismatch",
+    "unknown-entity-offers-refresh": "board_mismatch",
+    "person-question-is-not-comparative": "board_mismatch",
+    "refuses-to-rank": "board_mismatch",
+}
+
+
+def test_ask_skill_names_its_governing_references():
+    fm, body = parse_frontmatter(read("skills/ask/SKILL.md"))
+    assert "Placeholder" not in body
+    for phrase in ["what's happening with", "what's the status of", "who is working on", "who's on",
+                   "what's stuck", "what's blocked", "why is", "what did", "ask eng-pulse"]:
+        assert phrase in fm["description"], phrase
+    for ref in ["references/fixture-mode.md", "references/gather-linear.md",
+                "references/gather-github.md", "references/gather-slack.md",
+                "references/identity.md", "references/signals.md", "references/rollup.md",
+                "references/formats/", "setup refresh", "daily-report", "unowned", "*inferred*"]:
+        assert ref in body, ref
+    assert "doesn't rank people" in body
+    for key in THRESHOLD_KEYS:
+        assert not re.search(rf"{key}\W{{0,4}}\d", body), key
+    for phrase in ["Red if any red", "Yellow if any yellow"]:
+        assert phrase not in body
+
+
+def test_ask_eval_cases_and_fixture_copies():
+    ev = repo_root() / "skills/ask/evals"
+    assert {c.name for c in ev.iterdir() if c.is_dir()} == set(ASK_CASES)
+    for case, src in ASK_CASES.items():
+        c = ev / case
+        fm, body = parse_frontmatter((c / "prompt.md").read_text())
+        assert fm["tags"] == ["eng-pulse", "ask"], case
+        assert fm["allowed_tools"] == ["Read", "Glob", "Grep", "Skill", "Write", "Edit", "Bash"]
+        lines = [l for l in body.strip().splitlines() if l.strip()]
+        assert lines[-2].rstrip().endswith("fixtures: ./fixtures") and lines[-1].startswith("Input files:"), case
+        assert (c / "place-files.sh").exists()
+        assert len(list((c / "graders").glob("*.md"))) >= 3, case
+        fx = c / "files/fixtures"
+        assert not (fx / "expected.json").exists(), case
+        for f in FIXTURE_FILES:
+            assert (fx / f).read_text() == (repo_root() / "tests/fixtures" / src / f).read_text(), (case, f)

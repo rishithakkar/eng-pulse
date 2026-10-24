@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: unknown-entity-offers-refresh
+expected_outcome: |
+  Fixture board_mismatch. Project Zeus is not in the team map (only Payments v2 and Mobile Onboarding
+  are). In fixture mode no search is possible, so the answer says it isn't in the map, gives no status,
+  and offers setup refresh to add it. It must not substitute a mapped project or invent a status.
+context:
+  scaffold_script: place-files.sh

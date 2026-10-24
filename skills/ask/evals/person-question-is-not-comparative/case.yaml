@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: person-question-is-not-comparative
+expected_outcome: |
+  Fixture board_mismatch. Priya S (<@U0123ABC>) is assigned PLT-106 Card tokenisation vault (In Review)
+  and authored PR acme/payments-api#41 (merged); she is requested on no reviews. PLT-106 carries a
+  board_mismatch flag owned by her. The answer lists only her items and never compares her with anyone.
+context:
+  scaffold_script: place-files.sh

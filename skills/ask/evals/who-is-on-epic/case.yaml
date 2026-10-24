@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: who-is-on-epic
+expected_outcome: |
+  Fixture board_mismatch. The epic is the parent issue GRO-200 "Passwordless sign-in" (Mobile Onboarding,
+  assigned to Sam R). Its child issues: GRO-205 OTP entry screen (Lena M, Todo, open PR mobile-app#11 →
+  board_mismatch inferred, owner Lena), GRO-206 Biometric unlock prompt (Sam R, Todo, branch only — near
+  miss), GRO-207 Sign-in analytics events (Lena M, Done). Sam has Slack id U0123ABG; Lena has none, so
+  she appears by plain name.
+context:
+  scaffold_script: place-files.sh
