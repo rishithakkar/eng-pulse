@@ -50,6 +50,7 @@ Ask "Run the daily report. I'm the <role>; give me the <format> as <destination>
 | "Run the daily report --dry-run" | Counts of issues, PRs, threads, project updates and cycles. Each flag, each project colour and the coverage lines. Nothing rendered, delivered or saved. | | | |
 | Disconnect GitHub, run the PM view as markdown | Exactly one line `GitHub not connected — stuck_pr, stale_pr, contested_pr, board_mismatch and the linked-PR activity check of idle_issue omitted`. No PR flags. Linear and Slack flags still present. | | | |
 | Disconnect Slack, run the PM view as markdown | One `Slack not connected — the thread case of blocked omitted` line | | | |
+| Blocked-by relation to a completed issue: mark issue A "blocked by" issue B, move B to Done, run the PM view as markdown | A blocked-by relation to a completed issue must not flag: no `blocked` flag on A, and B's state was read with `get_issue` (B appears in no flag and not under Unmapped) | | | |
 | Set one project's `linear_project_id` to a wrong UUID | Coverage line `Linear project <name> not found by UUID — check team-map.yaml`. That project is skipped, and the others are reported. | | | |
 
 ## 4. Five `ask` questions

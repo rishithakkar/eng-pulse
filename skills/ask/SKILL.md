@@ -59,7 +59,7 @@ Fixture mode: follow `references/fixture-mode.md` (no connector calls), then kee
 | epic or issue | the project that holds it, as above; keep the parent issue or milestone and its child issues, and the PRs and threads linked to them |
 | person | issues assigned to the person; PRs they authored or are requested to review. Nothing else |
 | stuck or blocked | every mapped project as for project status; keep flags only |
-| shipped in window | issues that reached `completed` and PRs merged within the window: for a team, issues with its `linear_team_id` and the PRs linked to them; for a project, as for project status |
+| shipped in window | issues that reached `completed` and PRs merged within the window (`references/gather-linear.md`, "Shipped in window"; `references/gather-github.md` step 3, merged query): for a team, its `linear_team_id` and the PRs linked to those issues; for a project, its UUID and `repos` |
 
 A connector that is missing or fails: continue, and keep its coverage line from its recipe for step 6. Linear missing: stop after its coverage line, as daily-report does.
 
@@ -67,6 +67,7 @@ A connector that is missing or fails: continue, and keep its coverage line from 
 
 - Run the signals of `references/signals.md` on the gathered subset, under its rules (sources required, owner rule, *inferred*, `{age}`). Never invent a signal.
 - Owners resolve through `references/identity.md`; an unresolved owner is "unowned".
+- A project the gather step could not resolve is skipped (`references/signals.md`, Conventions, *Unresolvable project*).
 - Colour (project status, why colour, a stuck answer that names colours): `references/rollup.md`, "Attaching flags to projects" and "Project colour". Do not colour a project from a partial gather.
 - `overloaded` is never raised here: it compares a person's load to a limit, and `ask` answers no workload question.
 
@@ -74,7 +75,7 @@ A connector that is missing or fails: continue, and keep its coverage line from 
 
 - Short paragraphs, no headers, no tables. Lead with the direct answer in the first sentence: the colour and the reason, the names, or "nothing is stuck".
 - Flags are listed with the flag-line convention of `references/formats/pm-view.md` ("Rules"): `- 🔴`/`- 🟡`, signal id, *inferred* where it applies, subject, owner, the filled `next_action`, and the source link last.
-- Owners: `<@U…>` only when the person has a `slack` id in the map, else their plain `name` (`references/identity.md`, "Owner with no Slack id"); "unowned" when null.
+- Owners: "Name (<@U…>)", for example "Priya S (<@U0123ABC>)", when the person has a `slack` id in the map; else their plain `name` (`references/identity.md`, "Owner with no Slack id"); "unowned" when null. Never a bare `<@U…>`.
 - Every issue, PR, thread or update you mention is linked. Every number links the items it counts.
 - Stuck or blocked: list only red and yellow flags, red first; if there are none, say so in one sentence. Do not list healthy items as stuck.
 - Why colour: the flags that set the colour, and nothing else. If the project is not that colour, say which colour it is and why.

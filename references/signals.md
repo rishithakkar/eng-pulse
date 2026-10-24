@@ -19,6 +19,8 @@ Conventions used in the definitions:
 - A signal runs only when every source in its `sources_required` is connected; sub-cases that need another source run only when that source is connected too.
 - *Subject* is what a flag is about, and what `expected.json` in each fixture records: an issue by `identifier`, a PR or thread by `url`, a cycle as `<team name> / <cycle name>`, a project by its `name`, a person by their `people` key.
 - `{age}` in `next_action` renders as hours under two days, else whole days.
+- *Context-only issues* (`references/gather-linear.md`, "Context-only issues") are never a flag's subject; they are read only where a definition below names them (`overloaded` counts, a `blocked` blocker's state).
+- *Unresolvable project*: a team-map project the gather step could not resolve (a "not found by UUID" coverage note) is skipped: no signals run for it, it gets no colour and is not counted in the TL;DR. It appears only in the coverage line.
 
 ### stuck_pr
 ```yaml
@@ -113,7 +115,7 @@ visible_in: [exec, pm, lead]
 
 **Definition:** One of two sub-cases:
 
-- *Issue case*: an open issue with an id in `blocked_by` that points to an open issue. A `blocked_by` id that is not among the gathered issues is treated as open and the flag is labelled *inferred*. Subject: the blocked issue's `identifier`. `{age}` is `now - updated_at` of the blocked issue.
+- *Issue case*: an open issue with an id in `blocked_by` that points to an open issue. The gather step reads every blocker's state (`references/gather-linear.md`, step 11), so a blocker whose `state_type` is `completed` or `canceled` never flags. Only when that read failed, so the `blocked_by` id is not among the gathered issues, is the blocker treated as open and the flag labelled *inferred*. Subject: the blocked issue's `identifier`. `{age}` is `now - updated_at` of the blocked issue.
 - *Thread case* (only when Slack is connected): a thread with `is_blocker_candidate == true`, `answered == false` and `now - started_at > thresholds.blocker_unanswered_hours`. Subject: the thread `url`. `{age}` is `now - started_at`.
 
 `thresholds.blocker_unanswered_hours` applies to the thread case only; the issue case has no threshold.
@@ -131,7 +133,7 @@ next_action: "{owner}: check in with {subject} about finishing or handing off wo
 visible_in: [lead]
 ```
 
-**Definition:** A person (an `assignee_id` that resolves to a `people` key) assigned more than `thresholds.wip_warn` issues with `state_type == started`, counted across all teams and projects. Unresolved assignees are never flagged. Subject: the person's `people` key. Shown in the lead view only, as that person's work in progress beside their teammates' in team order, never sorted by count and never in the exec brief or the PM view.
+**Definition:** A person (an `assignee_id` that resolves to a `people` key) assigned more than `thresholds.wip_warn` issues with `state_type == started`, counted across all teams and projects. Unresolved assignees are never flagged. Subject: the person's `people` key. Shown in the lead view only, as that person's work in progress beside their teammates' in name order within the team, never sorted by count and never in the exec brief or the PM view.
 
 **Fixture:** tests/fixtures/overloaded/
 

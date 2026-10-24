@@ -578,3 +578,22 @@ def test_contributing_states_hard_rules_and_how_to_add_a_signal():
 
 def test_changelog_has_0_1_0():
     assert "## [0.1.0]" in read("CHANGELOG.md")
+
+
+# --- Final fix wave -----------------------------------------------------------
+
+def test_blocker_state_is_read_and_a_done_blocker_never_flags():
+    lin = read("references/gather-linear.md")
+    step11 = re.search(r"^11\. .*$", lin, re.MULTILINE).group(0)
+    assert "get_issue(id)" in step11 and "blocked_by" in step11 and "context-only" in step11
+    assert "## Context-only issues" in lin
+    blocked = read("references/signals.md").split("### blocked", 1)[1].split("### ", 1)[0]
+    assert "never flags" in blocked and "read failed" in blocked
+    # the fixture's near miss: GRO-208 is blocked by GRO-209, which is completed
+    g = merge_fixture(repo_root() / "tests/fixtures/blocked")
+    by_ident = {i["identifier"]: i for i in g["issues"]}
+    by_id = {i["id"]: i for i in g["issues"]}
+    assert [by_id[b]["state_type"] for b in by_ident["GRO-208"]["blocked_by"]] == ["completed"]
+    exp = json.loads(read("tests/fixtures/blocked/expected.json"))
+    assert "GRO-208" in {n["subject"] for n in exp["near_miss"]}
+    assert "GRO-208" not in {f["subject"] for f in exp["flags"]}

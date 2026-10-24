@@ -63,7 +63,7 @@ Read `references/signals.md` in full. Run every signal whose `sources_required` 
 
 - Owners: the signal's `owner_rule`, resolved through `references/identity.md`; an unresolved owner is `null` ("unowned").
 - Each flag records: signal id, severity, subject, owner, `inferred`, source URL, `{age}` and the filled `next_action`.
-- A project the gather step could not resolve (a "not found by UUID" coverage note) is skipped: no signals, no colour, not counted. It appears only in the coverage line.
+- A project the gather step could not resolve is skipped (`references/signals.md`, Conventions, *Unresolvable project*).
 
 ## 5. Roll up
 

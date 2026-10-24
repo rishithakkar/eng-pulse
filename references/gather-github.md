@@ -27,7 +27,7 @@ For each project build `<scope>`: one `repo:owner/name` qualifier per entry in `
    - `<scope> is:pr is:open draft:false review:approved`
    - `<scope> is:pr is:open draft:false review:required`
    Precedence when a PR matches several: `changes_requested` > `approved` > `required`. Any open PR matched by none, and every draft, gets `none`. (`review:none` is also available for spot checks.)
-3. **Moved in the window.** `<scope> is:pr updated:>=<since>` and `<scope> is:pr is:merged merged:>=<since>`. Merged PRs feed `board_mismatch` (a) and report text. Closed-unmerged PRs are kept with `state: closed` but no signal reads them.
+3. **Moved in the window.** `<scope> is:pr updated:>=<since>` and `<scope> is:pr is:merged merged:>=<since>`. Merged PRs feed `board_mismatch` (a) and report text. Closed-unmerged PRs are kept with `state: closed` but no signal reads them. For `ask`'s "shipped in window" question, run only the merged query, with `<since>` = the local date of the asked window's start, and drop PRs whose `merged_at` is before it.
 4. **Linked issues (cheap).** For every PR, parse Linear identifiers (`[A-Z][A-Z0-9]+-\d+`) from the title and body in the search result. Branch names are added in step 6 for candidates.
 5. **Candidates.** A PR is a deep-read candidate when it is open and any of:
    - non-draft, `review_state` `none` or `required`, and `now - created_at > thresholds.review_wait_hours` (`stuck_pr`);

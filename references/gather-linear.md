@@ -24,26 +24,38 @@ Compute once, in the team map's `timezone`:
 - `window.end` = now.
 - `window.start` = 18:00 local on the previous working day (per `working_days`). On a Monday that is Friday 18:00, so the weekend is covered. Any run of non-working days is covered the same way.
 - `window.timezone` = the team map's `timezone`.
-- For `updatedAt` filters use the smallest whole-day ISO-8601 duration that reaches `window.start`: `-P1D` Tuesday to Friday, `-P3D` on Monday.
+- For `updatedAt` filters use the smallest whole-day ISO-8601 duration that reaches `window.start` from `window.end` (e.g. `-P1D` for a morning run after a working day, `-P2D` for a run after 18:00, `-P3D` on a Monday morning), then drop results whose `updatedAt` is older than `window.start`.
 
 ## Steps
 
 1. **Confirm projects.** For each map project call `get_project(query=<linear_project_id>)` once. If it does not resolve, add `Linear project <name> not found by UUID — check team-map.yaml` and skip that project. Never fall back to the name.
 2. **Statuses.** For each map team call `list_issue_statuses(team=<linear_team_id>)`. Keep each status's name and type; the open types are `backlog`, `unstarted`, `started`.
 3. **What moved.** Per project: `list_issues(project=<UUID>, updatedAt=<duration>, orderBy="updatedAt", limit=250)`.
-4. **Work in progress.** Per project and per open status name from step 2: `list_issues(project=<UUID>, state=<status name>, limit=250)`. Then per team, for each `started` status: `list_issues(team=<linear_team_id>, state=<status name>, limit=250)`, so `overloaded` counts started work outside the mapped projects too.
+4. **Work in progress.** Per project and per open status name from step 2: `list_issues(project=<UUID>, state=<status name>, limit=250)`. Then per team, for each `started` status: `list_issues(team=<linear_team_id>, state=<status name>, limit=250)`, so `overloaded` counts started work outside the mapped projects too. An issue returned only by this team-wide scan is *context-only* (see "Context-only issues").
 5. **Paging.** Every `list_issues` call: while the result reports another page (`hasNextPage`), call again with the same filters plus `cursor=<returned cursor>` (`endCursor` in the result). The response field names `hasNextPage`/`endCursor` are unconfirmed: verify on first run and fix them here. Stop only when no further page is reported. Never drop a page silently.
 6. **Cycles.** Per team: `list_cycles(team=<linear_team_id>)`; keep the cycle where `startsAt <= window.end < endsAt`. For it: `list_issues(team=<linear_team_id>, cycle=<cycle id>, limit=250)`, paged. Add those issues to `issues` as well (cycle `issue_ids` must refer to gathered issues).
 7. **Project health.** Per project: `get_status_updates(type="project", project=<UUID>, limit=1, orderBy="createdAt")` — the newest update. The `health` field (`onTrack` | `atRisk` | `offTrack`) is expected in the payload; verify on first run and, if it is named differently, map it here and note it. No update → produce none (the `health` signal handles "missing").
 8. **Milestones (optional).** Only when the report shows epic progress: `list_milestones(project=<UUID>)`. Milestones are report text, not a model entity.
 9. **Deduplicate** issues by `id`; later reads of the same issue win.
 10. **Candidate-only deep reads.** Call `get_issue(id)` only for candidates, never for every issue:
-    - every `started` issue (`idle_issue`, `board_mismatch`);
+    - every `started` issue that is not context-only (`idle_issue`, `board_mismatch`);
     - `backlog`/`unstarted` issues whose `identifier` appears in a gathered PR's `linked_issue_identifiers` (run this pass after `gather-github.md`);
     - any open issue whose state name or a label contains "block".
     From `get_issue` read `attachments` (linked PR title/url, stored by Linear's GitHub integration), the git branch name and, if present, blocked-by relations.
-11. **Relations.** Issue-relation (blocked-by) tools exist but their exact names are unconfirmed. On the first run capture them with one `tools/list` and add them to `references/tool-names.json`; until then read `blocked_by` from `get_issue` when present, else `[]`.
+11. **Relations and blocker state.** Issue-relation (blocked-by) tools exist but their exact names are unconfirmed. On the first run capture them with one `tools/list` and add them to `references/tool-names.json`; until then read `blocked_by` from `get_issue` when present, else `[]`. Then, for each `blocked_by` id that is not already among the gathered issues, call `get_issue(id)` once and add the result to `issues` as a context-only issue, so the blocker's `state_type` is known to `blocked`. If that read fails, leave the blocker out of `issues` and add `Linear blocker <id> of <identifier> unreadable — <tool error>` to `coverage_notes`; `blocked` then treats it as open and *inferred*.
 12. **Last activity.** For `started` candidates whose `updatedAt` is older than `thresholds.idle_issue_days`, call `list_comments(issueId=<id>, limit=1, orderBy="createdAt")` and take the newer of that comment and `updatedAt`.
+
+## Context-only issues
+
+An issue that is gathered only by the team-wide `started` scan (step 4) or only as a blocker read (step 11) is *context-only*. It is added to `issues`, but it is read only where a signal definition names it: the team-wide scan feeds `overloaded` and the lead view's WIP per person, and a blocker read supplies the blocker's state to `blocked`. A context-only issue never raises a flag of its own (no `idle_issue`, `board_mismatch`, `blocked` or other signal has it as subject), never gets a step-10 deep read, and never appears under "Unmapped". An issue also returned by steps 3, 4 (per project) or 6 is not context-only.
+
+## Shipped in window (`ask` only)
+
+For "what shipped" or "what did <team/project> do" questions, `skills/ask` adds one read per team or project in scope:
+
+`list_issues(team=<linear_team_id> | project=<UUID>, state=<completed status name from step 2>, updatedAt=<duration reaching window.start>, limit=250)`, paged as in step 5, then drop results whose `updatedAt` is older than `window.start`.
+
+Unconfirmed: verify on first run that `state` accepts a completed status name together with `updatedAt`; if a call rejects it, report the tool error in a coverage line rather than guessing another parameter. These issues answer the question only; they raise no signal.
 
 ## Discovery search (`ask` only)
 
