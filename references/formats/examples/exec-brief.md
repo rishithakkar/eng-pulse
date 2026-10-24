@@ -1,6 +1,6 @@
 # Acme engineering brief — Tue 27 Oct 2026
 
-**TL;DR:** 0 red, 2 yellow, 0 green. Nothing threatens a date; both yellows are the board lagging the code.
+**TL;DR:** 0 red, 2 yellow, 0 green; no red flags, and both yellows are the board lagging the code.
 
 **Projects**
 
@@ -9,7 +9,6 @@
 
 **Red and yellow items**
 
-- **Payments v2** — *Risk:* progress read from the board lags shipped work. *Impact:* none; the current cycle has no unstarted scope with 2 working days left. *Being done:* the owner is closing the merged issue. *Ask:* no action needed from you; resolved by Wed 28 Oct.
-- **Mobile Onboarding** — *Risk:* progress may be understated (*inferred*: the board, not the code, could be right). *Impact:* none on dates; the latest update reads on track. *Being done:* the owner is moving the issue to match its code. *Ask:* no action needed from you; the team confirms the board by Wed 28 Oct.
+No action needed from you: both projects are yellow on PR/issue flags only. Payments v2 is checked at the end of its cycle, Wed 28 Oct; Mobile Onboarding has no cycle and is re-checked in tomorrow's report, Wed 28 Oct.
 
 _Coverage: all connectors connected · source: fixtures_
