@@ -551,3 +551,30 @@ def test_ask_eval_cases_and_fixture_copies():
         assert not (fx / "expected.json").exists(), case
         for f in FIXTURE_FILES:
             assert (fx / f).read_text() == (repo_root() / "tests/fixtures" / src / f).read_text(), (case, f)
+
+
+# --- Task 10: README, CONTRIBUTING, packaging --------------------------------
+
+def test_pytest_ini_collects_check_py():
+    ini = repo_root() / "pytest.ini"
+    assert ini.exists(), "pytest.ini missing: `pytest tests/` would skip check.py"
+    m = re.search(r"^python_files\s*=\s*(.+)$", ini.read_text(), re.MULTILINE)
+    assert m and "check.py" in m.group(1).split()
+
+
+def test_readme_covers_install_github_caveat_and_formats():
+    r = read("README.md")
+    for s in ["## Install", "GitHub", "api.githubcopilot.com", "exec", "PM", "lead", "Slack",
+              "tests/screenshots/dashboard-light.png", "fixtures:"]:
+        assert s in r
+
+
+def test_contributing_states_hard_rules_and_how_to_add_a_signal():
+    c = read("CONTRIBUTING.md")
+    for s in ["never rank individuals", "untrusted", "UUID", "draft-first",
+              "references/signals.md", "tests/fixtures/", "pytest", "claude plugin eval"]:
+        assert s in c
+
+
+def test_changelog_has_0_1_0():
+    assert "## [0.1.0]" in read("CHANGELOG.md")
