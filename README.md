@@ -27,7 +27,14 @@ Destinations: dashboard artifact (the page above, with light, dark and print lay
 
 About two minutes, plus the GitHub step if you want PR signals.
 
-1. **Add the plugin.** Upload `eng-pulse.plugin` in Claude's plugin settings (Cowork or Claude.ai). To build the file from this repo, see [CONTRIBUTING.md](CONTRIBUTING.md#packaging).
+1. **Add the plugin.** In Claude Code, install it straight from this repo:
+
+   ```
+   /plugin marketplace add rishithakkar/eng-pulse
+   /plugin install eng-pulse@eng-pulse
+   ```
+
+   In Cowork or Claude.ai, add `rishithakkar/eng-pulse` as a plugin marketplace in plugin settings, or upload `eng-pulse.plugin` there instead. To build the file from this repo, see [CONTRIBUTING.md](CONTRIBUTING.md#packaging).
 2. **Connect Linear and Slack** from Claude's connector directory (Settings → Connectors) and sign in. Linear is required. Slack is optional.
 3. **Connect GitHub (optional), the non-obvious way:**
 
