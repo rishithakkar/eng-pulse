@@ -4,6 +4,10 @@ All notable changes to eng-pulse are recorded here. Versions follow [Semantic Ve
 
 ## [Unreleased]
 
+### Added
+
+- `.claude-plugin/marketplace.json`, so the repo is its own marketplace: `/plugin marketplace add rishithakkar/eng-pulse` then `/plugin install eng-pulse@eng-pulse`.
+
 ## [0.1.0] - 2026-10-25
 
 ### Added

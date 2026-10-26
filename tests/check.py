@@ -38,6 +38,18 @@ def test_plugin_manifest():
     assert m["license"] == "MIT"
 
 
+def test_marketplace_lists_the_plugin_at_repo_root():
+    m = json.loads(read(".claude-plugin/plugin.json"))
+    mk = json.loads(read(".claude-plugin/marketplace.json"))
+    assert re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", mk["name"])
+    assert mk["owner"]["name"]
+    [entry] = mk["plugins"]
+    assert entry["name"] == m["name"]
+    assert entry["source"] == "./"
+    assert entry["version"] == m["version"]
+    assert entry["description"] == m["description"]
+
+
 def test_every_skill_has_frontmatter_and_short_body():
     dirs = skill_dirs()
     assert [d.name for d in dirs] == ["ask", "daily-report", "setup"]
